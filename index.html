@@ -417,8 +417,8 @@ button.primary{
 <script>
 const $ = id => document.getElementById(id);
 const rand = Math.random;
-const SAVE_KEY = 'zparkour3d_v4_save';
-const CFG_KEY = 'zparkour3d_v4_cfg';
+const SAVE_KEY = 'zparkour3d_v5_save';
+const CFG_KEY = 'zparkour3d_v5_cfg';
 const memStorage = Object.create(null);
 
 function saveData(key, val) {
@@ -725,6 +725,7 @@ syncScreenVisibility();
     legendary: { label: 'Lendária', color: '#ffb703', weight: 5  }
   };
 
+  // Base compatível com até 40 armas (cada arma usa família `model` + variações por índice/raridade)
   const WEAPONS = [
     { name: 'Pistola 9mm', icon: '🔫', rarity: 'common', ammo: '9mm', delay: 0.25, dmg: 2.4, pel: 1, sp: 0.004, mag: 15, rel: 0.95, pool: 30, freq: 240, ty: 'square', model: 'pistol', muzzleZ: -0.35 },
     { name: 'Escopeta Tática', icon: '💥', rarity: 'uncommon', ammo: '12G', delay: 0.78, dmg: 1.6, pel: 6, sp: 0.055, mag: 8, rel: 1.7, pool: 16, freq: 105, ty: 'sawtooth', model: 'shotgun', muzzleZ: -0.74 },
@@ -740,7 +741,6 @@ syncScreenVisibility();
     { name: 'Marreta Pesada', icon: '🔨', rarity: 'rare', ammo: 'Impacto', delay: 0.60, dmg: 10.5, pel: 1, sp: 0, mag: 1, rel: 0.1, pool: 0, freq: 120, ty: 'sawtooth', melee: true, rng: 3.4, model: 'hammer' }
   ];
 
-  // Roupas e Armaduras com defesa real
   const ARMORS = [
     { id: 'none', name: 'Camiseta Comum', icon: '👕', rarity: 'common', def: 0, sleeveColor: 0x3b4859, gloveColor: 0xc99672, desc: 'Roupa básica sem blindagem.' },
     { id: 'leather', name: 'Jaqueta de Couro', icon: '🧥', rarity: 'common', def: 12, sleeveColor: 0x5c341d, gloveColor: 0x261a14, desc: 'Couro grosso contra mordidas (+12% Defesa).' },
@@ -750,7 +750,6 @@ syncScreenVisibility();
     { id: 'jugger', name: 'Exoesqueleto Titânio', icon: '🦾', rarity: 'legendary', def: 68, sleeveColor: 0xd97706, gloveColor: 0x1e293b, desc: 'Blindagem pesada militar (+68% Defesa).' }
   ];
 
-  // Comidas, Bebidas e Suprimentos médicos com modelos 3D e recuperação distinta
   const CONSUMABLES = [
     { id: 'canned', name: 'Carne Enlatada', icon: '🍖', kind: 'food', rarity: 'common', food: 45, water: 0, hp: 8, stam: 0, color: 0xc93b2b, desc: 'Conserva nutritiva: +45 Fome, +8 Vida.' },
     { id: 'biscuit', name: 'Ração Seca', icon: '🍪', kind: 'food', rarity: 'common', food: 24, water: -5, hp: 2, stam: 5, color: 0xd49b4b, desc: 'Biscoito energético: +24 Fome, -5 Sede.' },
@@ -858,24 +857,39 @@ syncScreenVisibility();
     addNoise(ctx, w, h, 350, ['#121317', '#32353d']);
   }, 40, 1);
 
-  const extWallTex = makeCanvasTex(256, 256, (ctx, w, h) => {
-    ctx.fillStyle = '#6a4636'; ctx.fillRect(0, 0, w, h);
-    ctx.strokeStyle = 'rgba(0,0,0,0.32)'; ctx.lineWidth = 2;
-    for (let y = 0; y < h; y += 16) {
-      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
-    }
-    addNoise(ctx, w, h, 900, ['#3b2419', '#8a5e49', '#241711']);
-    for (let gx = 16; gx < w; gx += 64) {
-      for (let gy = 16; gy < h; gy += 64) {
-        ctx.fillStyle = '#1d1f24';
-        ctx.fillRect(gx - 3, gy - 3, 38, 42);
-        ctx.fillStyle = ((gx + gy) % 128 === 0) ? '#ffd269' : '#24313d';
-        ctx.fillRect(gx, gy, 32, 36);
-        ctx.fillStyle = '#8b8780';
-        ctx.fillRect(gx - 4, gy + 36, 40, 5);
+  // 3 estilos arquitetônicos de fachada
+  function makeFacadeTex(styleIndex) {
+    return makeCanvasTex(256, 256, (ctx, w, h) => {
+      if (styleIndex === 0) {
+        ctx.fillStyle = '#6d4433'; ctx.fillRect(0, 0, w, h);
+        ctx.strokeStyle = 'rgba(0,0,0,0.34)'; ctx.lineWidth = 2;
+        for (let y = 0; y < h; y += 16) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+        }
+      } else if (styleIndex === 1) {
+        ctx.fillStyle = '#2b394a'; ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = '#1d2733';
+        for (let y = 0; y < h; y += 64) ctx.fillRect(0, y + 56, w, 8);
+      } else {
+        ctx.fillStyle = '#5c5852'; ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = 'rgba(20,20,22,0.25)';
+        for (let x = 24; x < w; x += 58) ctx.fillRect(x, 0, 14, h);
       }
-    }
-  }, 1, 1);
+      addNoise(ctx, w, h, 950, ['#27211d', '#8e7d6c', '#18181b']);
+      for (let gx = 16; gx < w; gx += 64) {
+        for (let gy = 16; gy < h; gy += 64) {
+          ctx.fillStyle = '#15171b';
+          ctx.fillRect(gx - 4, gy - 4, 40, 44);
+          ctx.fillStyle = styleIndex === 1 ? '#1e3a5f' : (((gx + gy) % 128 === 0) ? '#ffd269' : '#24313d');
+          ctx.fillRect(gx, gy, 32, 36);
+          ctx.fillStyle = '#9ca3af';
+          ctx.fillRect(gx - 5, gy + 36, 42, 5);
+        }
+      }
+    }, 1, 1);
+  }
+
+  const facadeTexList = [makeFacadeTex(0), makeFacadeTex(1), makeFacadeTex(2)];
 
   const intWallTex = makeCanvasTex(256, 256, (ctx, w, h) => {
     const g = ctx.createLinearGradient(0, 0, 0, h);
@@ -887,13 +901,7 @@ syncScreenVisibility();
     ctx.fillRect(0, 0, w, h);
     ctx.fillStyle = '#8f7d69';
     ctx.fillRect(0, h * 0.48, w, 6);
-    ctx.strokeStyle = 'rgba(55,45,35,0.45)';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(45, 30); ctx.lineTo(62, 74); ctx.lineTo(54, 118);
-    ctx.moveTo(190, 60); ctx.lineTo(175, 108); ctx.lineTo(188, 145);
-    ctx.stroke();
-    addNoise(ctx, w, h, 800, ['#8c8070', '#dfd6c7', '#61564a']);
+    addNoise(ctx, w, h, 750, ['#8c8070', '#dfd6c7', '#61564a']);
   }, 2, 1);
 
   const intFloorTex = makeCanvasTex(256, 256, (ctx, w, h) => {
@@ -903,9 +911,8 @@ syncScreenVisibility();
       ctx.fillRect(0, i * 16, w, 15);
       ctx.fillStyle = '#3a210d';
       ctx.fillRect(0, i * 16 + 15, w, 1);
-      ctx.fillRect((i * 53) % w, i * 16, 2, 16);
     }
-    addNoise(ctx, w, h, 600, ['#3d230e', '#8f6239']);
+    addNoise(ctx, w, h, 550, ['#3d230e', '#8f6239']);
   }, 3, 3);
 
   const crateTex = makeCanvasTex(64, 64, (ctx, w, h) => {
@@ -915,57 +922,64 @@ syncScreenVisibility();
     ctx.beginPath(); ctx.moveTo(4, 4); ctx.lineTo(w - 4, h - 4); ctx.stroke();
   }, 1, 1);
 
-  const zSkinTex = makeCanvasTex(128, 128, (ctx, w, h) => {
+  const zSkinTex = makeCanvasTex(256, 256, (ctx, w, h) => {
     const g = ctx.createLinearGradient(0, 0, 0, h);
-    g.addColorStop(0, '#7c9e66');
-    g.addColorStop(0.55, '#597a45');
-    g.addColorStop(1, '#3b542c');
+    g.addColorStop(0, '#7ea365');
+    g.addColorStop(0.55, '#567841');
+    g.addColorStop(1, '#374f28');
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, w, h);
-    ctx.strokeStyle = '#2d4220'; ctx.lineWidth = 2;
-    for (let i = 0; i < 12; i++) {
+    ctx.strokeStyle = '#243619'; ctx.lineWidth = 2;
+    for (let i = 0; i < 18; i++) {
       ctx.beginPath(); ctx.moveTo(rand() * w, rand() * h); ctx.lineTo(rand() * w, rand() * h); ctx.stroke();
     }
-    ctx.fillStyle = 'rgba(130,18,18,0.5)';
-    for (let i = 0; i < 7; i++) {
-      ctx.beginPath(); ctx.arc(rand() * w, rand() * h, 4 + rand() * 8, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(135,16,16,0.55)';
+    for (let i = 0; i < 10; i++) {
+      ctx.beginPath(); ctx.arc(rand() * w, rand() * h, 5 + rand() * 12, 0, Math.PI * 2); ctx.fill();
     }
-    addNoise(ctx, w, h, 450, ['#2b4220', '#96b87f', '#5e1111']);
+    addNoise(ctx, w, h, 800, ['#263a1b', '#9bc080', '#5e1111']);
   });
 
-  const zFaceTex = makeCanvasTex(128, 128, (ctx, w, h) => {
-    ctx.fillStyle = '#6b8e55';
+  const zFaceTex = makeCanvasTex(256, 256, (ctx, w, h) => {
+    ctx.fillStyle = '#698d52';
     ctx.fillRect(0, 0, w, h);
-    addNoise(ctx, w, h, 350, ['#4a6638', '#86a86e', '#5a1414']);
-    ctx.fillStyle = '#2c3d21';
-    ctx.fillRect(22, 34, 32, 9);
-    ctx.fillRect(74, 34, 32, 9);
+    addNoise(ctx, w, h, 700, ['#456133', '#88ab6e', '#5a1414']);
+    // Sobrancelhas e olheiras
+    ctx.fillStyle = '#26361c';
+    ctx.fillRect(42, 66, 68, 18);
+    ctx.fillRect(146, 66, 68, 18);
     ctx.fillStyle = '#181111';
-    ctx.fillRect(26, 43, 24, 16);
-    ctx.fillRect(78, 43, 24, 16);
+    ctx.fillRect(50, 84, 52, 32);
+    ctx.fillRect(154, 84, 52, 32);
+    // Olhos amarelos com pupila
     ctx.fillStyle = '#ffe44d';
-    ctx.fillRect(33, 47, 10, 8);
-    ctx.fillRect(85, 47, 10, 8);
+    ctx.fillRect(62, 92, 24, 16);
+    ctx.fillRect(166, 92, 24, 16);
+    ctx.fillStyle = '#111';
+    ctx.fillRect(71, 96, 6, 8);
+    ctx.fillRect(175, 96, 6, 8);
+    // Nariz
     ctx.fillStyle = '#2b3822';
-    ctx.beginPath(); ctx.moveTo(64, 58); ctx.lineTo(56, 74); ctx.lineTo(72, 74); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(128, 114); ctx.lineTo(112, 148); ctx.lineTo(144, 148); ctx.closePath(); ctx.fill();
+    // Boca e dentes
     ctx.fillStyle = '#2b0606';
-    ctx.fillRect(36, 82, 56, 26);
+    ctx.fillRect(72, 164, 112, 54);
     ctx.fillStyle = '#8f1111';
-    ctx.fillRect(34, 106, 60, 7);
+    ctx.fillRect(68, 212, 120, 14);
     ctx.fillStyle = '#ebe2c7';
-    for (let i = 0; i < 5; i++) ctx.fillRect(40 + i * 10, 82, 6, 7);
-    for (let i = 0; i < 4; i++) ctx.fillRect(44 + i * 11, 101, 6, 7);
+    for (let i = 0; i < 6; i++) ctx.fillRect(80 + i * 18, 164, 11, 14);
+    for (let i = 0; i < 5; i++) ctx.fillRect(90 + i * 19, 202, 11, 13);
   });
 
-  const zClothesTex = makeCanvasTex(128, 128, (ctx, w, h) => {
+  const zClothesTex = makeCanvasTex(256, 256, (ctx, w, h) => {
     ctx.fillStyle = '#384c66';
     ctx.fillRect(0, 0, w, h);
-    ctx.fillStyle = 'rgba(20,22,26,0.38)';
+    ctx.fillStyle = 'rgba(20,22,26,0.42)';
     ctx.fillRect(0, h * 0.65, w, h * 0.35);
-    ctx.fillStyle = 'rgba(125,16,16,0.52)';
-    ctx.beginPath(); ctx.arc(w * 0.32, h * 0.42, 18, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.arc(w * 0.72, h * 0.58, 13, 0, Math.PI * 2); ctx.fill();
-    addNoise(ctx, w, h, 450, ['#1c2633', '#526b8c', '#631010']);
+    ctx.fillStyle = 'rgba(135,16,16,0.56)';
+    ctx.beginPath(); ctx.arc(w * 0.32, h * 0.42, 34, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(w * 0.72, h * 0.58, 24, 0, Math.PI * 2); ctx.fill();
+    addNoise(ctx, w, h, 800, ['#1c2633', '#526b8c', '#631010']);
   });
 
   const groundMesh = new T.Mesh(
@@ -991,12 +1005,12 @@ syncScreenVisibility();
   }
 
   const boxes = [];
+  const buildingLots = [];
   const pickups = [];
   const fxList = [];
   let zombies = [];
   let bombs = [];
 
-  const extWallMat = new T.MeshStandardMaterial({ map: extWallTex, roughness: 0.72 });
   const intWallMat = new T.MeshStandardMaterial({ map: intWallTex, roughness: 0.78 });
   const intFloorMat = new T.MeshStandardMaterial({ map: intFloorTex, roughness: 0.8 });
   const roofMat = new T.MeshStandardMaterial({ color: 0x35383e, roughness: 0.7 });
@@ -1020,7 +1034,14 @@ syncScreenVisibility();
     return mesh;
   }
 
-  // Modelos 3D distintos para consumíveis, roupas, munição e armas no chão
+  function overlapsLot(x0, x1, z0, z1) {
+    for (let i = 0; i < buildingLots.length; i++) {
+      const lot = buildingLots[i];
+      if (x0 < lot.x1 && x1 > lot.x0 && z0 < lot.z1 && z1 > lot.z0) return true;
+    }
+    return false;
+  }
+
   function createPickupModel(kind, subId) {
     const g = new T.Group();
     if (kind === 'cons') {
@@ -1089,30 +1110,39 @@ syncScreenVisibility();
     pickups.push({ x, y: yPos, z, kind, subId, mesh });
   }
 
-  function buildThickBuilding(cx, cz, w, d, h) {
+  function buildThickBuilding(cx, cz, w, d, h, styleIdx = 0) {
+    const extMat = new T.MeshStandardMaterial({ map: facadeTexList[styleIdx % facadeTexList.length], roughness: 0.72 });
     const wallT = 1.2;
     const doorW = 3.2;
     const doorH = 2.6;
 
-    addObstacle(cx, cz - d / 2 + wallT / 2, w, wallT, h, extWallMat, 0);
+    // Reserva lote com margem de segurança para evitar sobreposição
+    buildingLots.push({
+      x0: cx - w / 2 - 4.2,
+      x1: cx + w / 2 + 4.2,
+      z0: cz - d / 2 - 4.2,
+      z1: cz + d / 2 + 4.2
+    });
+
+    addObstacle(cx, cz - d / 2 + wallT / 2, w, wallT, h, extMat, 0);
     const inN = new T.Mesh(new T.PlaneGeometry(w - wallT * 2, h), intWallMat);
     inN.position.set(cx, h / 2, cz - d / 2 + wallT + 0.03);
     scene.add(inN);
 
     const sideW = (w - doorW) / 2;
-    addObstacle(cx - doorW / 2 - sideW / 2, cz + d / 2 - wallT / 2, sideW, wallT, h, extWallMat, 0);
-    addObstacle(cx + doorW / 2 + sideW / 2, cz + d / 2 - wallT / 2, sideW, wallT, h, extWallMat, 0);
+    addObstacle(cx - doorW / 2 - sideW / 2, cz + d / 2 - wallT / 2, sideW, wallT, h, extMat, 0);
+    addObstacle(cx + doorW / 2 + sideW / 2, cz + d / 2 - wallT / 2, sideW, wallT, h, extMat, 0);
     if (h > doorH) {
-      addObstacle(cx, cz + d / 2 - wallT / 2, doorW, wallT, h - doorH, extWallMat, doorH);
+      addObstacle(cx, cz + d / 2 - wallT / 2, doorW, wallT, h - doorH, extMat, doorH);
     }
 
-    addObstacle(cx - w / 2 + wallT / 2, cz, wallT, d - wallT * 2, h, extWallMat, 0);
+    addObstacle(cx - w / 2 + wallT / 2, cz, wallT, d - wallT * 2, h, extMat, 0);
     const inW = new T.Mesh(new T.PlaneGeometry(d - wallT * 2, h), intWallMat);
     inW.rotation.y = Math.PI / 2;
     inW.position.set(cx - w / 2 + wallT + 0.03, h / 2, cz);
     scene.add(inW);
 
-    addObstacle(cx + w / 2 - wallT / 2, cz, wallT, d - wallT * 2, h, extWallMat, 0);
+    addObstacle(cx + w / 2 - wallT / 2, cz, wallT, d - wallT * 2, h, extMat, 0);
     const inE = new T.Mesh(new T.PlaneGeometry(d - wallT * 2, h), intWallMat);
     inE.rotation.y = -Math.PI / 2;
     inE.position.set(cx + w / 2 - wallT - 0.03, h / 2, cz);
@@ -1125,7 +1155,11 @@ syncScreenVisibility();
     scene.add(floor);
 
     addObstacle(cx, cz, w + 0.4, d + 0.4, 0.65, roofMat, h, true);
+    // Parapeito no topo do prédio
+    addObstacle(cx, cz - d / 2 + 0.2, w + 0.5, 0.4, 0.55, concreteMat, h + 0.65, true);
+    addObstacle(cx, cz + d / 2 - 0.2, w + 0.5, 0.4, 0.55, concreteMat, h + 0.65, true);
 
+    // Escada de caixotes externa sem invadir outros lotes
     addObstacle(cx - w / 2 - 1.3, cz - 2.2, 2.2, 2.2, 1.35, crateMat, 0, true);
     addObstacle(cx - w / 2 - 1.3, cz + 0.3, 2.2, 2.2, 2.7, crateMat, 0, true);
     addObstacle(cx - w / 2 - 1.3, cz + 2.8, 2.2, 2.2, 4.1, crateMat, 0, true);
@@ -1138,21 +1172,26 @@ syncScreenVisibility();
   }
 
   function buildCity() {
+    let idx = 0;
     for (let i = -3; i <= 3; i++) {
       for (let j = -3; j <= 3; j++) {
         if (i === 0 && j === 0) continue;
-        const cx = i * 48 + 18;
-        const cz = j * 48 + 18;
-        const w = 13 + Math.floor(rand() * 4);
-        const d = 13 + Math.floor(rand() * 4);
+        const cx = i * 48 + 24;
+        const cz = j * 48 + 24;
+        const w = 12.5 + Math.floor(rand() * 3.5);
+        const d = 12.5 + Math.floor(rand() * 3.5);
         const h = 4.6 + Math.floor(rand() * 4) * 1.4;
-        buildThickBuilding(cx, cz, w, d, h);
+        if (!overlapsLot(cx - w / 2 - 4.2, cx + w / 2 + 4.2, cz - d / 2 - 4.2, cz + d / 2 + 4.2)) {
+          buildThickBuilding(cx, cz, w, d, h, idx++);
+        }
       }
     }
-    for (let k = 0; k < 110; k++) {
+    for (let k = 0; k < 105; k++) {
       const x = (rand() - 0.5) * MAP_LIMIT * 1.55;
       const z = (rand() - 0.5) * MAP_LIMIT * 1.55;
-      if (Math.hypot(x, z) < 9 || isBlocked(x, z, 0, 1.5)) continue;
+      if (Math.hypot(x, z) < 9) continue;
+      if (overlapsLot(x - 1.6, x + 1.6, z - 1.6, z + 1.6)) continue;
+      if (isBlocked(x, z, 0, 1.8)) continue;
       const h = 1.1 + rand() * 1.25;
       addObstacle(x, z, 1.8, 1.8, h, k % 4 === 0 ? concreteMat : crateMat, 0, true);
       if (k % 2 === 0) spawnPickup(x + 1.2, z, ['cons', 'a', 'r', 'armor'][k % 4], 0.4);
@@ -1197,7 +1236,7 @@ syncScreenVisibility();
     return null;
   }
 
-  // ============== ARMAS 3D DETALHADAS + MÃOS + EFEITOS VISUAIS ==============
+  // ============== ARMAS 3D (SUPORTE A 40 ARMAS + MÃOS + EFEITOS) ==============
   const matMetalDark = new T.MeshStandardMaterial({ color: 0x1e2229, metalness: 0.78, roughness: 0.28 });
   const matSteel = new T.MeshStandardMaterial({ color: 0xb0b8c4, metalness: 0.88, roughness: 0.18 });
   const matWood = new T.MeshStandardMaterial({ color: 0x6e3d1a, metalness: 0.08, roughness: 0.68 });
@@ -1234,27 +1273,42 @@ syncScreenVisibility();
   }
 
   function addHandsToWeapon(twoHanded, foreZ = -0.26, gripZ = 0.06, gripY = -0.11) {
-    // Mão direita no punho + antebraço
     addPart(gunGroup, new T.BoxGeometry(0.075, 0.075, 0.09), matGlove, 0.005, gripY, gripZ);
     addPart(gunGroup, new T.BoxGeometry(0.085, 0.085, 0.28), matSleeve, 0.04, gripY - 0.05, gripZ + 0.18, -0.18, 0.14);
     if (twoHanded) {
-      // Mão esquerda apoiando o guarda-mão
       addPart(gunGroup, new T.BoxGeometry(0.075, 0.07, 0.095), matGlove, -0.02, -0.045, foreZ);
       addPart(gunGroup, new T.BoxGeometry(0.085, 0.08, 0.34), matSleeve, -0.11, -0.11, foreZ + 0.22, -0.22, -0.32);
     }
   }
 
-  function rebuildWeaponModel(weapon) {
+  function resolveWeaponFamily(weapon, idx) {
+    const raw = String(weapon?.model || '').toLowerCase();
+    if (raw) return raw;
+    const n = String(weapon?.name || '').toLowerCase();
+    if (n.includes('revolver') || n.includes('magnum') || n.includes('.44')) return 'revolver';
+    if (n.includes('pistola') || n.includes('pistol')) return 'pistol';
+    if (n.includes('escopeta') || n.includes('shotgun') || n.includes('12')) return 'shotgun';
+    if (n.includes('smg') || n.includes('mp5') || n.includes('uzi')) return 'smg';
+    if (n.includes('ak')) return 'ak47';
+    if (n.includes('sniper') || n.includes('dmr') || n.includes('awp') || n.includes('m24')) return 'sniper';
+    if (n.includes('minigun') || n.includes('m134') || n.includes('metralhadora')) return 'minigun';
+    if (n.includes('katana') || n.includes('espada')) return 'katana';
+    if (n.includes('facão') || n.includes('faca') || n.includes('machete')) return 'machete';
+    if (n.includes('marreta') || n.includes('martelo') || n.includes('hammer')) return 'hammer';
+    return idx % 2 === 0 ? 'm4' : 'pistol';
+  }
+
+  function rebuildWeaponModel(weapon, weaponIdx = 0) {
     while (gunGroup.children.length) gunGroup.remove(gunGroup.children[0]);
     minigunBarrelRef = null;
-    const type = weapon ? weapon.model : 'pistol';
+    const type = resolveWeaponFamily(weapon, weaponIdx);
+    const accentMat = weapon?.rarity === 'legendary' ? matGold : (weapon?.rarity === 'epic' ? matSteel : matPoly);
 
     if (type === 'pistol' || type === 'revolver') {
       const slideMat = type === 'revolver' ? matSteel : matMetalDark;
       addPart(gunGroup, new T.BoxGeometry(0.062, 0.068, 0.32), slideMat, 0, 0.025, -0.05);
-      addPart(gunGroup, new T.BoxGeometry(0.056, 0.032, 0.30), matPoly, 0, -0.024, -0.05);
-      addPart(gunGroup, new T.BoxGeometry(0.052, 0.165, 0.082), matPoly, 0, -0.115, 0.06, 0.24);
-      // Miras iluminadas
+      addPart(gunGroup, new T.BoxGeometry(0.056, 0.032, 0.30), accentMat, 0, -0.024, -0.05);
+      addPart(gunGroup, new T.BoxGeometry(0.052, 0.165, 0.082), accentMat, 0, -0.115, 0.06, 0.24);
       addPart(gunGroup, new T.BoxGeometry(0.012, 0.018, 0.018), matRedDot, 0, 0.066, -0.19);
       addPart(gunGroup, new T.BoxGeometry(0.036, 0.016, 0.016), matMetalDark, 0, 0.065, 0.09);
       const barrel = new T.CylinderGeometry(0.014, 0.014, 0.18, 8); barrel.rotateX(Math.PI / 2);
@@ -1286,18 +1340,17 @@ syncScreenVisibility();
       addHandsToWeapon(true, -0.32, 0.08, -0.10);
     } else if (type === 'm4' || type === 'smg') {
       const len = type === 'smg' ? 0.32 : 0.46;
-      addPart(gunGroup, new T.BoxGeometry(0.070, 0.095, 0.28), matPoly, 0, -0.01, 0.28);
+      addPart(gunGroup, new T.BoxGeometry(0.070, 0.095, 0.28), accentMat, 0, -0.01, 0.28);
       addPart(gunGroup, new T.BoxGeometry(0.074, 0.092, len), matMetalDark, 0, 0.01, -0.04);
       addPart(gunGroup, new T.BoxGeometry(0.058, 0.018, len * 0.85), matSteel, 0, 0.064, -0.05);
-      // Mira Red Dot com ponto vermelho
-      addPart(gunGroup, new T.BoxGeometry(0.052, 0.044, 0.085), matPoly, 0, 0.09, 0.02);
+      addPart(gunGroup, new T.BoxGeometry(0.052, 0.044, 0.085), accentMat, 0, 0.09, 0.02);
       addPart(gunGroup, new T.BoxGeometry(0.012, 0.012, 0.012), matRedDot, 0, 0.092, 0.02);
       const barrel = new T.CylinderGeometry(0.014, 0.014, type === 'smg' ? 0.22 : 0.38, 8); barrel.rotateX(Math.PI / 2);
       addPart(gunGroup, barrel, matSteel, 0, 0.02, type === 'smg' ? -0.30 : -0.44);
-      addPart(gunGroup, new T.BoxGeometry(0.048, 0.20, 0.072), matPoly, 0, -0.13, -0.08, -0.12);
+      addPart(gunGroup, new T.BoxGeometry(0.048, 0.20, 0.072), accentMat, 0, -0.13, -0.08, -0.12);
       addHandsToWeapon(true, type === 'smg' ? -0.22 : -0.30, 0.07, -0.10);
     } else if (type === 'sniper') {
-      addPart(gunGroup, new T.BoxGeometry(0.072, 0.105, 0.36), matPoly, 0, -0.02, 0.32, -0.1);
+      addPart(gunGroup, new T.BoxGeometry(0.072, 0.105, 0.36), accentMat, 0, -0.02, 0.32, -0.1);
       addPart(gunGroup, new T.BoxGeometry(0.076, 0.088, 0.48), matMetalDark, 0, 0.01, -0.04);
       const barrel = new T.CylinderGeometry(0.015, 0.018, 0.64, 8); barrel.rotateX(Math.PI / 2);
       addPart(gunGroup, barrel, matSteel, 0, 0.024, -0.56);
@@ -1399,9 +1452,9 @@ syncScreenVisibility();
     setTimeout(() => camera.remove(arc), 120);
   }
 
-  // ============== ZUMBIS ARTICULADOS ==============
-  const zSkinMat = new T.MeshStandardMaterial({ map: zSkinTex, roughness: 0.68 });
-  const zFaceMat = new T.MeshStandardMaterial({ map: zFaceTex, roughness: 0.62 });
+  // ============== ZUMBIS ARTICULADOS & ANIMADOS ==============
+  const zSkinMat = new T.MeshStandardMaterial({ map: zSkinTex, roughness: 0.65 });
+  const zFaceMat = new T.MeshStandardMaterial({ map: zFaceTex, roughness: 0.6 });
   const zClothesMat = new T.MeshStandardMaterial({ map: zClothesTex, roughness: 0.8 });
   const zRunnerClothesMat = new T.MeshStandardMaterial({ color: 0x8a2822, roughness: 0.72 });
   const zTankClothesMat = new T.MeshStandardMaterial({ color: 0x2c353d, metalness: 0.35, roughness: 0.55 });
@@ -1467,7 +1520,8 @@ syncScreenVisibility();
     g.userData = {
       hp, maxHp: hp, speed, kind, isBoss, dps,
       dead: false, deadTimer: 0, phase: rand() * 6.28,
-      limbs: { armL, armR, legL, legR, head }
+      atkCd: 0, flinch: 0,
+      limbs: { torso, armL, armR, legL, legR, head }
     };
     scene.add(g);
     zombies.push(g);
@@ -1560,12 +1614,24 @@ syncScreenVisibility();
           gameState.hp = Math.min(100, Math.max(10, raw.hp));
           gameState.food = raw.food ?? 80;
           gameState.water = raw.water ?? 80;
-          gameState.wIdx = (raw.wIdx >= 0 && raw.wIdx < WEAPONS.length) ? raw.wIdx : 0;
+          if (Array.isArray(raw.owned)) {
+            for (let i = 0; i < Math.min(raw.owned.length, WEAPONS.length); i++) {
+              if (raw.owned[i]) gameState.owned[i] = true;
+            }
+          }
+          if (Array.isArray(raw.mag)) {
+            for (let i = 0; i < Math.min(raw.mag.length, WEAPONS.length); i++) {
+              if (typeof raw.mag[i] === 'number') gameState.mag[i] = raw.mag[i];
+            }
+          }
+          if (Array.isArray(raw.ammo)) {
+            for (let i = 0; i < Math.min(raw.ammo.length, WEAPONS.length); i++) {
+              if (typeof raw.ammo[i] === 'number') gameState.ammo[i] = raw.ammo[i];
+            }
+          }
+          gameState.wIdx = (raw.wIdx >= 0 && raw.wIdx < WEAPONS.length && gameState.owned[raw.wIdx]) ? raw.wIdx : 0;
           if (raw.armorId && ARMORS.some(a => a.id === raw.armorId)) gameState.armorId = raw.armorId;
           if (raw.armorsOwned) Object.assign(gameState.armorsOwned, raw.armorsOwned);
-          if (Array.isArray(raw.owned) && raw.owned.length === WEAPONS.length) gameState.owned = raw.owned;
-          if (Array.isArray(raw.mag) && raw.mag.length === WEAPONS.length) gameState.mag = raw.mag;
-          if (Array.isArray(raw.ammo) && raw.ammo.length === WEAPONS.length) gameState.ammo = raw.ammo;
           if (raw.foodInv) Object.assign(gameState.foodInv, raw.foodInv);
           if (raw.mats) Object.assign(gameState.mats, raw.mats);
           gameState.kills = raw.kills || 0;
@@ -1574,7 +1640,7 @@ syncScreenVisibility();
       } catch (_) {}
     }
     applyArmorVisuals(gameState.armorId);
-    rebuildWeaponModel(WEAPONS[gameState.wIdx]);
+    rebuildWeaponModel(WEAPONS[gameState.wIdx], gameState.wIdx);
     for (let i = 0; i < 12; i++) spawnNearbyZombie();
   }
 
@@ -1681,7 +1747,7 @@ syncScreenVisibility();
         gameState.wIdx = idx;
         gameState.reloadTimer = 0;
         UI.aiming = false;
-        rebuildWeaponModel(WEAPONS[idx]);
+        rebuildWeaponModel(WEAPONS[idx], idx);
         toast(WEAPONS[idx].name);
         return;
       }
@@ -1766,6 +1832,7 @@ syncScreenVisibility();
       const dist = Math.hypot(zmb.position.x - x, zmb.position.z - z);
       if (dist <= radius) {
         zmb.userData.hp -= dmg * (1 - dist / (radius * 1.15));
+        zmb.userData.flinch = 0.25;
         if (zmb.userData.hp <= 0) killZombie(zmb, false, true);
       }
     }
@@ -1841,6 +1908,7 @@ syncScreenVisibility();
           const align = ((dx / Math.max(0.01, dist)) * dir.x + (dz / Math.max(0.01, dist)) * dir.z);
           if (align > 0.35) {
             zmb.userData.hp -= w.dmg;
+            zmb.userData.flinch = 0.2;
             spawnSparkOrBlood(new T.Vector3(zmb.position.x, zmb.position.y + 1.3, zmb.position.z), true, 5);
             if (zmb.userData.hp <= 0) killZombie(zmb, false);
           }
@@ -1880,6 +1948,7 @@ syncScreenVisibility();
       while (obj && !obj.userData.hp && obj.parent) obj = obj.parent;
       if (!obj || obj.userData.dead) continue;
       const hs = Boolean(hit.object.userData.isHead);
+      obj.userData.flinch = 0.18;
       spawnSparkOrBlood(hit.point, true, hs ? 9 : 4);
       if (hs) {
         pulseHeadshot();
@@ -1974,7 +2043,7 @@ syncScreenVisibility();
         gameState.mag[pick] = WEAPONS[pick].mag;
         gameState.ammo[pick] = WEAPONS[pick].pool;
         gameState.wIdx = pick;
-        rebuildWeaponModel(WEAPONS[pick]);
+        rebuildWeaponModel(WEAPONS[pick], pick);
         toast('Desbloqueou: ' + WEAPONS[pick].name);
       }
     }
@@ -2042,7 +2111,7 @@ syncScreenVisibility();
         b.type = 'button'; b.className = 'primary'; b.textContent = 'EQUIPAR ARMA';
         onTap(b, () => {
           gameState.wIdx = idx; gameState.reloadTimer = 0; UI.aiming = false;
-          rebuildWeaponModel(w); toast('Equipou ' + w.name); Bridge.renderInv();
+          rebuildWeaponModel(w, idx); toast('Equipou ' + w.name); Bridge.renderInv();
         });
         insp.appendChild(b);
       } else if (idx === gameState.wIdx) {
@@ -2413,7 +2482,6 @@ syncScreenVisibility();
     if (UI.firing) fireWeapon();
     collectPickups();
 
-    // Partículas e cápsulas temporárias
     for (let i = fxList.length - 1; i >= 0; i--) {
       const f = fxList[i];
       f.life -= dt;
@@ -2462,12 +2530,16 @@ syncScreenVisibility();
       if (d.dead) {
         d.deadTimer += dt;
         zmb.rotation.x = Math.min(1.5, d.deadTimer * 3.5);
+        zmb.position.y = Math.max(-0.35, -d.deadTimer * 0.35);
         if (d.deadTimer > 1.0) {
           scene.remove(zmb);
           zombies.splice(i, 1);
         }
         continue;
       }
+      d.atkCd = Math.max(0, d.atkCd - dt);
+      d.flinch = Math.max(0, d.flinch - dt);
+
       const dx = gameState.x - zmb.position.x;
       const dz = gameState.z - zmb.position.z;
       const dist = Math.hypot(dx, dz);
@@ -2489,20 +2561,29 @@ syncScreenVisibility();
 
       const L = d.limbs;
       if (L) {
-        const swing = moving ? Math.sin(nowSec * d.speed * 2.8 + d.phase) : 0;
-        L.legL.rotation.x = swing * 0.72;
-        L.legR.rotation.x = -swing * 0.72;
-        L.armL.rotation.x = (d.kind === 'runner' ? 0.55 : 0.15) + swing * 0.28;
-        L.armR.rotation.x = (d.kind === 'runner' ? 0.55 : 0.15) - swing * 0.28;
-        L.head.rotation.z = Math.sin(nowSec * 2 + d.phase) * 0.12;
+        const freqMult = d.kind === 'runner' ? 4.4 : d.kind === 'tank' ? 2.1 : 2.9;
+        const swing = moving ? Math.sin(nowSec * d.speed * freqMult + d.phase) : 0;
+        const flinchTilt = d.flinch > 0 ? -0.22 * (d.flinch / 0.2) : 0;
+        L.legL.rotation.x = swing * 0.78;
+        L.legR.rotation.x = -swing * 0.78;
+        L.torso.rotation.x = (d.kind === 'runner' ? 0.22 : 0.08) + flinchTilt;
+        L.armL.rotation.x = (d.kind === 'runner' ? 0.65 : 0.22) + swing * 0.32;
+        L.armR.rotation.x = (d.kind === 'runner' ? 0.65 : 0.22) - swing * 0.32;
+        L.head.rotation.z = Math.sin(nowSec * 2.2 + d.phase) * 0.14;
+        L.head.rotation.x = flinchTilt * 1.3;
       }
 
       const reach = d.isBoss ? 1.9 : d.kind === 'tank' ? 1.45 : 1.05;
       if (dist < reach && gameState.y < 1.35) {
         if (d.kind === 'boomer') {
           killZombie(zmb, false, false);
-        } else {
-          damagePlayer(d.dps * dt);
+        } else if (d.atkCd <= 0) {
+          d.atkCd = 0.75;
+          if (L) {
+            L.armL.rotation.x = 1.05;
+            L.armR.rotation.x = 1.05;
+          }
+          damagePlayer(d.dps * 0.75);
         }
       }
     }
@@ -2577,15 +2658,16 @@ syncScreenVisibility();
       $('crosshair').style.display = scoped ? 'none' : 'block';
       gunGroup.visible = !scoped;
 
-      // Rotação dos canos da Minigun e balanço suave da arma
       if (minigunBarrelRef && UI.firing && gameState.mag[gameState.wIdx] > 0) {
         minigunBarrelRef.rotation.z += dt * 24;
       }
       const bob = Math.sin(now * 0.008) * 0.006;
+      const reloadDip = gameState.reloadTimer > 0 ? -0.10 : 0;
+      const reloadPitch = gameState.reloadTimer > 0 ? -0.35 : 0;
       gunGroup.position.x += ((UI.aiming ? 0 : 0.25) - gunGroup.position.x) * 12 * dt;
-      gunGroup.position.y += ((UI.aiming ? -0.17 : -0.23 + bob) - gunGroup.position.y) * 12 * dt;
+      gunGroup.position.y += ((UI.aiming ? -0.17 : -0.23 + bob + reloadDip) - gunGroup.position.y) * 12 * dt;
       gunGroup.position.z += (-0.50 - gunGroup.position.z) * 10 * dt;
-      gunGroup.rotation.x += (0 - gunGroup.rotation.x) * 12 * dt;
+      gunGroup.rotation.x += (reloadPitch - gunGroup.rotation.x) * 12 * dt;
       gunGroup.rotation.z += ((gameState.slideTimer > 0 ? -0.22 : 0) - gunGroup.rotation.z) * 12 * dt;
 
       flashLight.intensity = Math.max(0, flashLight.intensity - dt * 28);
