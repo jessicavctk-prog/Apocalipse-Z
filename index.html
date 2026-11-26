@@ -40,19 +40,19 @@ button{
   pointer-events:auto;
   transition:transform .08s ease,background .12s ease,border-color .12s ease;
 }
-button:active{transform:scale(.95)}
+button:active{transform:scale(.94)}
 button.primary{
   background:linear-gradient(180deg,#872318,#3d100b);
   border-color:#ff634f;
 }
 
-/* Botão de configurações sempre acessível */
+/* Botão de configurações no canto superior direito */
 #cfgBtn{
   position:fixed;
-  right:14px;
-  top:calc(12px + env(safe-area-inset-top,0px));
-  width:48px;height:48px;padding:0;border-radius:50%;
-  font-size:21px;
+  right:12px;
+  top:calc(10px + env(safe-area-inset-top,0px));
+  width:46px;height:46px;padding:0;border-radius:50%;
+  font-size:20px;
   display:flex;align-items:center;justify-content:center;
   z-index:300;
   background:rgba(24,18,17,0.95);
@@ -60,53 +60,55 @@ button.primary{
   box-shadow:0 4px 14px rgba(0,0,0,.65);
 }
 
-/* HUD */
+/* HUD no canto superior esquerdo (sem colisão com botões) */
 #hud{
   position:fixed;
-  left:12px;
-  top:calc(12px + env(safe-area-inset-top,0px));
+  left:10px;
+  top:calc(10px + env(safe-area-inset-top,0px));
   z-index:40;
   display:none;
   pointer-events:none;
-  max-width:56vw;
+  max-width:calc(100vw - 76px);
   text-shadow:0 2px 4px #000;
-  font-weight:700;font-size:12px;
+  font-weight:700;font-size:11.5px;
 }
 #zoneBadge{
   display:inline-block;
   background:rgba(0,0,0,.65);
   border:1px solid rgba(255,110,90,.55);
-  padding:3px 9px;border-radius:6px;
-  color:#ffc2b5;font-size:11px;margin-bottom:6px;
+  padding:2px 8px;border-radius:6px;
+  color:#ffc2b5;font-size:10.5px;margin-bottom:5px;
 }
+.barsRow{display:flex;flex-direction:column;gap:4px;width:154px}
 .bar{
-  width:168px;height:10px;
-  background:rgba(0,0,0,.65);
+  width:100%;height:9px;
+  background:rgba(0,0,0,.68);
   border:1px solid rgba(255,255,255,.22);
-  border-radius:5px;overflow:hidden;margin-bottom:5px;
+  border-radius:5px;overflow:hidden;
 }
 .bar>i{display:block;height:100%;transition:width .1s linear}
-#inf{margin-top:4px;line-height:1.3}
-#matsHud{font-size:11px;opacity:.9;margin-top:2px}
+#inf{margin-top:4px;line-height:1.25}
+#matsHud{font-size:10.5px;opacity:.9;margin-top:2px}
 #quickSlots{
-  display:flex;gap:6px;margin-top:7px;
+  display:flex;gap:5px;margin-top:6px;
   pointer-events:auto;position:relative;z-index:45;
 }
 .qSlot{
-  width:44px;height:44px;padding:0;border-radius:8px;
+  width:40px;height:40px;padding:0;border-radius:8px;
   border:1.5px solid #785b49;
   background:rgba(26,20,17,0.92);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  position:relative;font-size:11px;
+  position:relative;font-size:14px;
 }
-.qSlot small{position:absolute;top:2px;left:4px;font-size:9px;color:#ffd27d}
-.qSlot span{position:absolute;bottom:2px;right:4px;font-size:10px;font-weight:800;color:#fff}
+.qSlot small{position:absolute;top:1px;left:3px;font-size:8px;color:#ffd27d}
+.qSlot span{position:absolute;bottom:1px;right:3px;font-size:9.5px;font-weight:800;color:#fff}
 
 /* Boss bar & Mira & Flash */
 #bbar{
   position:fixed;top:calc(10px + env(safe-area-inset-top,0px));
-  left:26%;width:48%;height:11px;
-  background:rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.35);
+  left:50%;transform:translateX(-50%);
+  width:min(42vw,240px);height:10px;
+  background:rgba(0,0,0,.68);border:1px solid rgba(255,255,255,.35);
   display:none;z-index:40;border-radius:5px;overflow:hidden;pointer-events:none;
 }
 #bbi{display:block;height:100%;width:0%;background:#b833ff}
@@ -120,8 +122,8 @@ button.primary{
   opacity:0;pointer-events:none;z-index:60;
 }
 #msg{
-  position:fixed;top:22%;left:0;width:100%;
-  text-align:center;font:800 18px/1.2 system-ui,-apple-system,sans-serif;
+  position:fixed;top:24%;left:0;width:100%;
+  text-align:center;font:800 17px/1.2 system-ui,-apple-system,sans-serif;
   text-shadow:0 2px 8px #000;pointer-events:none;
   opacity:0;z-index:250;transition:opacity .2s;padding:0 12px;
 }
@@ -140,39 +142,65 @@ button.primary{
 #scopeV{position:fixed;left:50%;top:50%;width:1.5px;height:min(56vh,56vw);background:rgba(255,70,70,.8);transform:translate(-50%,-50%)}
 #scopeDot{position:fixed;left:50%;top:50%;width:6px;height:6px;border-radius:50%;background:#ff3535;transform:translate(-50%,-50%)}
 #scopeText{
-  position:fixed;left:50%;bottom:calc(15% + env(safe-area-inset-bottom,0px));
+  position:fixed;left:50%;bottom:calc(16% + env(safe-area-inset-bottom,0px));
   transform:translateX(-50%);font-size:11px;font-weight:800;letter-spacing:1.5px;
   color:#ffb1a3;text-shadow:0 2px 4px #000;
 }
 
-/* Controles Touch */
-.padBtn{
-  position:fixed;display:none;
-  width:62px;height:62px;padding:0;border-radius:50%;
-  font-size:24px;right:14px;z-index:90;
-  align-items:center;justify-content:center;
-  background:rgba(0,0,0,.78);touch-action:none;
-}
-#btnFire{bottom:calc(92px + env(safe-area-inset-bottom,0px));font-size:27px;border-color:#ff523f}
-#btnJump{bottom:calc(166px + env(safe-area-inset-bottom,0px))}
-#btnDash{bottom:calc(240px + env(safe-area-inset-bottom,0px));width:52px;height:52px;font-size:20px}
-#btnSwap{bottom:calc(300px + env(safe-area-inset-bottom,0px));width:52px;height:52px;font-size:19px}
-#btnSlide{bottom:calc(360px + env(safe-area-inset-bottom,0px));width:52px;height:52px;font-size:19px}
-
-.topActionBtn{
+/* Controles Touch: Coluna direita espaçada (nunca sobrepõe ⚙️ nem HUD) */
+#rightControls{
   position:fixed;
-  top:calc(168px + env(safe-area-inset-top,0px));
-  width:46px;height:46px;padding:0;border-radius:50%;
-  font-size:18px;display:none;z-index:90;
-  align-items:center;justify-content:center;
-  background:rgba(0,0,0,.78);
+  right:12px;
+  bottom:calc(14px + env(safe-area-inset-bottom,0px));
+  display:none;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:10px;
+  z-index:90;
+  pointer-events:none;
 }
-#btnGrenade{left:10px}
-#btnBomb{left:62px}
-#btnAim{left:114px}
-#btnCraft{left:166px}
-#btnReload{left:218px}
-#btnInv{left:270px}
+.rightMiniRow{
+  display:flex;
+  gap:8px;
+  pointer-events:none;
+}
+.rightMainRow{
+  display:flex;
+  align-items:flex-end;
+  gap:10px;
+  pointer-events:none;
+}
+.padBtn{
+  width:52px;height:52px;padding:0;border-radius:50%;
+  font-size:20px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(12,10,10,.82);
+  box-shadow:0 3px 10px rgba(0,0,0,.6);
+  pointer-events:auto;
+  touch-action:none;
+}
+#btnJump{width:60px;height:60px;font-size:24px}
+#btnFire{width:68px;height:68px;font-size:28px;border-color:#ff523f;background:rgba(50,12,10,.88)}
+
+/* Controles Touch: Bloco inferior esquerdo (3x2 organizado e sem sobreposição) */
+#leftActionGrid{
+  position:fixed;
+  left:12px;
+  bottom:calc(14px + env(safe-area-inset-bottom,0px));
+  display:none;
+  grid-template-columns:repeat(3,46px);
+  gap:8px;
+  z-index:90;
+  pointer-events:none;
+}
+.topActionBtn{
+  width:46px;height:46px;padding:0;border-radius:50%;
+  font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(12,10,10,.82);
+  box-shadow:0 3px 10px rgba(0,0,0,.6);
+  pointer-events:auto;
+}
 
 /* Menus e Modais */
 .modal{
@@ -257,10 +285,12 @@ button.primary{
 
 <div id="hud">
   <div id="zoneBadge">🏙️ CENTRO DENSO</div>
-  <div class="bar"><i id="barHp" style="background:#e33;width:100%"></i></div>
-  <div class="bar"><i id="barFd" style="background:#e90;width:80%"></i></div>
-  <div class="bar"><i id="barWt" style="background:#39e;width:80%"></i></div>
-  <div class="bar" style="height:6px"><i id="barSt" style="background:#4e8;width:100%"></i></div>
+  <div class="barsRow">
+    <div class="bar"><i id="barHp" style="background:#e33;width:100%"></i></div>
+    <div class="bar"><i id="barFd" style="background:#e90;width:80%"></i></div>
+    <div class="bar"><i id="barWt" style="background:#39e;width:80%"></i></div>
+    <div class="bar" style="height:6px"><i id="barSt" style="background:#4e8;width:100%"></i></div>
+  </div>
   <div id="inf"></div>
   <div id="matsHud"></div>
   <div id="quickSlots">
@@ -271,19 +301,28 @@ button.primary{
   </div>
 </div>
 
-<!-- Controles Touch -->
-<button type="button" class="padBtn" id="btnFire" title="Atirar">🔥</button>
-<button type="button" class="padBtn" id="btnJump" title="Pular">⏫</button>
-<button type="button" class="padBtn" id="btnDash" title="Dash">⚡</button>
-<button type="button" class="padBtn" id="btnSwap" title="Trocar Arma">🔄</button>
-<button type="button" class="padBtn" id="btnSlide" title="Deslizar">🛝</button>
+<!-- Controles Touch Direita -->
+<div id="rightControls">
+  <div class="rightMiniRow">
+    <button type="button" class="padBtn" id="btnSlide" title="Deslizar">🛝</button>
+    <button type="button" class="padBtn" id="btnDash" title="Dash">⚡</button>
+    <button type="button" class="padBtn" id="btnSwap" title="Trocar Arma">🔄</button>
+  </div>
+  <div class="rightMainRow">
+    <button type="button" class="padBtn" id="btnJump" title="Pular">⏫</button>
+    <button type="button" class="padBtn" id="btnFire" title="Atirar">🔥</button>
+  </div>
+</div>
 
-<button type="button" class="topActionBtn" id="btnGrenade" title="Granada">💣</button>
-<button type="button" class="topActionBtn" id="btnBomb" title="Bomba">🧨</button>
-<button type="button" class="topActionBtn" id="btnAim" title="Mirar">🎯</button>
-<button type="button" class="topActionBtn" id="btnCraft" title="Craft">🛠️</button>
-<button type="button" class="topActionBtn" id="btnReload" title="Recarregar">🔃</button>
-<button type="button" class="topActionBtn" id="btnInv" title="Inventário">🎒</button>
+<!-- Controles Touch Esquerda -->
+<div id="leftActionGrid">
+  <button type="button" class="topActionBtn" id="btnGrenade" title="Granada">💣</button>
+  <button type="button" class="topActionBtn" id="btnBomb" title="Bomba">🧨</button>
+  <button type="button" class="topActionBtn" id="btnAim" title="Mirar">🎯</button>
+  <button type="button" class="topActionBtn" id="btnCraft" title="Craft">🛠️</button>
+  <button type="button" class="topActionBtn" id="btnReload" title="Recarregar">🔃</button>
+  <button type="button" class="topActionBtn" id="btnInv" title="Inventário">🎒</button>
+</div>
 
 <!-- Menu Principal -->
 <div id="menu" class="modal">
@@ -361,8 +400,8 @@ button.primary{
 // ============== 1. UTILITÁRIOS & BOTÕES ==============
 const $ = id => document.getElementById(id);
 const rand = Math.random;
-const SAVE_KEY = 'zparkour3d_clean_save_v1';
-const CFG_KEY = 'zparkour3d_clean_cfg_v1';
+const SAVE_KEY = 'zparkour3d_v2_save';
+const CFG_KEY = 'zparkour3d_v2_cfg';
 const memStorage = Object.create(null);
 
 function saveData(key, val) {
@@ -423,7 +462,7 @@ function toast(text) {
 
 // ============== 2. ESTADO DA UI & CONFIGURAÇÕES ==============
 const UI = {
-  screen: 'menu', // 'menu' | 'play' | 'cfg' | 'craft' | 'inv'
+  screen: 'menu',
   firing: false,
   aiming: false,
   invTab: 'all',
@@ -467,9 +506,8 @@ function syncScreenVisibility() {
   const touchCapable = matchMedia('(pointer: coarse)').matches || ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
   $('hud').style.display = playing ? 'block' : 'none';
   $('crosshair').style.display = (playing && !UI.aiming) ? 'block' : 'none';
-  document.querySelectorAll('.padBtn, .topActionBtn').forEach(btn => {
-    btn.style.display = (playing && touchCapable) ? 'flex' : 'none';
-  });
+  $('rightControls').style.display = (playing && touchCapable) ? 'flex' : 'none';
+  $('leftActionGrid').style.display = (playing && touchCapable) ? 'grid' : 'none';
   if (!playing) {
     UI.aiming = false;
     $('scopeOverlay').style.display = 'none';
@@ -503,7 +541,6 @@ function requestFullscreenSafe() {
   } catch (_) {}
 }
 
-// Ponte segura para o motor 3D
 const Bridge = {
   startGame: () => toast('Carregando motor 3D...'),
   jump: () => {},
@@ -665,18 +702,18 @@ syncScreenVisibility();
   };
 
   const WEAPONS = [
-    { name: 'Pistola 9mm', rarity: 'common', ammo: '9mm', delay: 0.26, dmg: 2.3, pel: 1, sp: 0.004, mag: 15, rel: 1.0, pool: 30, freq: 240, ty: 'square' },
-    { name: 'Escopeta Tática', rarity: 'uncommon', ammo: '12G', delay: 0.80, dmg: 1.5, pel: 6, sp: 0.055, mag: 8, rel: 1.8, pool: 16, freq: 105, ty: 'sawtooth' },
-    { name: 'Rifle M4A1', rarity: 'rare', ammo: '5.56mm', delay: 0.095, dmg: 1.4, pel: 1, sp: 0.013, mag: 30, rel: 1.7, pool: 60, freq: 195, ty: 'square' },
-    { name: 'SMG MP5', rarity: 'common', ammo: '9mm', delay: 0.068, dmg: 0.9, pel: 1, sp: 0.026, mag: 30, rel: 1.4, pool: 60, freq: 310, ty: 'square' },
-    { name: 'Sniper M24', rarity: 'rare', ammo: '7.62mm', delay: 1.10, dmg: 9.5, pel: 1, sp: 0.0005, mag: 5, rel: 2.0, pool: 12, freq: 90, ty: 'sawtooth', scope: true, zoom: 16 },
-    { name: 'Magnum .44', rarity: 'rare', ammo: '.44', delay: 0.52, dmg: 5.8, pel: 1, sp: 0.007, mag: 6, rel: 1.5, pool: 12, freq: 130, ty: 'square' },
-    { name: 'Fuzil AK-47', rarity: 'uncommon', ammo: '7.62mm', delay: 0.092, dmg: 1.75, pel: 1, sp: 0.022, mag: 30, rel: 1.7, pool: 60, freq: 155, ty: 'sawtooth' },
-    { name: 'DMR Mk14', rarity: 'epic', ammo: '7.62mm', delay: 0.30, dmg: 4.0, pel: 1, sp: 0.003, mag: 12, rel: 1.7, pool: 24, freq: 125, ty: 'square', scope: true, zoom: 26 },
-    { name: 'Minigun M134', rarity: 'legendary', ammo: '7.62mm', delay: 0.042, dmg: 1.1, pel: 1, sp: 0.050, mag: 100, rel: 2.6, pool: 150, freq: 140, ty: 'sawtooth' },
-    { name: 'Katana Afiada', rarity: 'legendary', ammo: 'Lâmina', delay: 0.28, dmg: 5.6, pel: 1, sp: 0, mag: 1, rel: 0.1, pool: 0, freq: 220, ty: 'triangle', melee: true, rng: 3.4 },
-    { name: 'Facão de Selva', rarity: 'common', ammo: 'Lâmina', delay: 0.34, dmg: 4.2, pel: 1, sp: 0, mag: 1, rel: 0.1, pool: 0, freq: 190, ty: 'triangle', melee: true, rng: 3.0 },
-    { name: 'Marreta Pesada', rarity: 'rare', ammo: 'Impacto', delay: 0.65, dmg: 9.5, pel: 1, sp: 0, mag: 1, rel: 0.1, pool: 0, freq: 120, ty: 'sawtooth', melee: true, rng: 3.2 }
+    { name: 'Pistola 9mm', rarity: 'common', ammo: '9mm', delay: 0.26, dmg: 2.3, pel: 1, sp: 0.004, mag: 15, rel: 1.0, pool: 30, freq: 240, ty: 'square', model: 'pistol' },
+    { name: 'Escopeta Tática', rarity: 'uncommon', ammo: '12G', delay: 0.80, dmg: 1.5, pel: 6, sp: 0.055, mag: 8, rel: 1.8, pool: 16, freq: 105, ty: 'sawtooth', model: 'shotgun' },
+    { name: 'Rifle M4A1', rarity: 'rare', ammo: '5.56mm', delay: 0.095, dmg: 1.4, pel: 1, sp: 0.013, mag: 30, rel: 1.7, pool: 60, freq: 195, ty: 'square', model: 'm4' },
+    { name: 'SMG MP5', rarity: 'common', ammo: '9mm', delay: 0.068, dmg: 0.9, pel: 1, sp: 0.026, mag: 30, rel: 1.4, pool: 60, freq: 310, ty: 'square', model: 'smg' },
+    { name: 'Sniper M24', rarity: 'rare', ammo: '7.62mm', delay: 1.10, dmg: 9.5, pel: 1, sp: 0.0005, mag: 5, rel: 2.0, pool: 12, freq: 90, ty: 'sawtooth', scope: true, zoom: 16, model: 'sniper' },
+    { name: 'Magnum .44', rarity: 'rare', ammo: '.44', delay: 0.52, dmg: 5.8, pel: 1, sp: 0.007, mag: 6, rel: 1.5, pool: 12, freq: 130, ty: 'square', model: 'revolver' },
+    { name: 'Fuzil AK-47', rarity: 'uncommon', ammo: '7.62mm', delay: 0.092, dmg: 1.75, pel: 1, sp: 0.022, mag: 30, rel: 1.7, pool: 60, freq: 155, ty: 'sawtooth', model: 'ak47' },
+    { name: 'DMR Mk14', rarity: 'epic', ammo: '7.62mm', delay: 0.30, dmg: 4.0, pel: 1, sp: 0.003, mag: 12, rel: 1.7, pool: 24, freq: 125, ty: 'square', scope: true, zoom: 26, model: 'sniper' },
+    { name: 'Minigun M134', rarity: 'legendary', ammo: '7.62mm', delay: 0.042, dmg: 1.1, pel: 1, sp: 0.050, mag: 100, rel: 2.6, pool: 150, freq: 140, ty: 'sawtooth', model: 'minigun' },
+    { name: 'Katana Afiada', rarity: 'legendary', ammo: 'Lâmina', delay: 0.28, dmg: 5.6, pel: 1, sp: 0, mag: 1, rel: 0.1, pool: 0, freq: 220, ty: 'triangle', melee: true, rng: 3.4, model: 'katana' },
+    { name: 'Facão de Selva', rarity: 'common', ammo: 'Lâmina', delay: 0.34, dmg: 4.2, pel: 1, sp: 0, mag: 1, rel: 0.1, pool: 0, freq: 190, ty: 'triangle', melee: true, rng: 3.0, model: 'machete' },
+    { name: 'Marreta Pesada', rarity: 'rare', ammo: 'Impacto', delay: 0.65, dmg: 9.5, pel: 1, sp: 0, mag: 1, rel: 0.1, pool: 0, freq: 120, ty: 'sawtooth', melee: true, rng: 3.2, model: 'hammer' }
   ];
 
   const DROP_POOL = [];
@@ -740,7 +777,7 @@ syncScreenVisibility();
   const flashLight = new T.PointLight(0xffaa55, 0, 14);
   camera.add(flashLight);
 
-  // Texturas procedurais simples e rápidas
+  // ============== TEXTURAS PROCEDURAIS RICAS ==============
   function makeCanvasTex(w, h, drawFn, rx = 1, ry = 1) {
     const c = document.createElement('canvas');
     c.width = w; c.height = h;
@@ -751,6 +788,15 @@ syncScreenVisibility();
     return tex;
   }
 
+  function addNoise(ctx, w, h, count, colors) {
+    for (let i = 0; i < count; i++) {
+      ctx.globalAlpha = 0.14 + rand() * 0.28;
+      ctx.fillStyle = colors[i % colors.length];
+      ctx.fillRect(rand() * w, rand() * h, 1 + rand() * 3, 1 + rand() * 3);
+    }
+    ctx.globalAlpha = 1;
+  }
+
   const groundTex = makeCanvasTex(128, 128, (ctx, w, h) => {
     ctx.fillStyle = '#3b3934'; ctx.fillRect(0, 0, w, h);
     ctx.strokeStyle = '#25231f'; ctx.lineWidth = 2;
@@ -758,6 +804,7 @@ syncScreenVisibility();
       ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, h); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(w, i); ctx.stroke();
     }
+    addNoise(ctx, w, h, 400, ['#22201c', '#524f47', '#2f2d28']);
   }, 90, 90);
 
   const roadTex = makeCanvasTex(256, 64, (ctx, w, h) => {
@@ -765,23 +812,130 @@ syncScreenVisibility();
     ctx.fillStyle = '#6c6962'; ctx.fillRect(0, 0, w, 7); ctx.fillRect(0, h - 7, w, 7);
     ctx.fillStyle = '#d8ae28';
     for (let x = 8; x < w; x += 32) ctx.fillRect(x, h / 2 - 1.5, 16, 3);
+    addNoise(ctx, w, h, 350, ['#121317', '#32353d']);
   }, 40, 1);
 
-  const wallTex = makeCanvasTex(128, 128, (ctx, w, h) => {
-    ctx.fillStyle = '#5c4638'; ctx.fillRect(0, 0, w, h);
-    for (let gx = 12; gx < w; gx += 32) {
-      for (let gy = 12; gy < h; gy += 32) {
-        ctx.fillStyle = ((gx + gy) % 64 === 0) ? '#ffd269' : '#182028';
-        ctx.fillRect(gx, gy, 16, 18);
+  // Parede externa de prédio com textura de tijolo/concreto e janelas
+  const extWallTex = makeCanvasTex(256, 256, (ctx, w, h) => {
+    ctx.fillStyle = '#6a4636'; ctx.fillRect(0, 0, w, h);
+    ctx.strokeStyle = 'rgba(0,0,0,0.32)'; ctx.lineWidth = 2;
+    for (let y = 0; y < h; y += 16) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+    }
+    addNoise(ctx, w, h, 900, ['#3b2419', '#8a5e49', '#241711']);
+    for (let gx = 16; gx < w; gx += 64) {
+      for (let gy = 16; gy < h; gy += 64) {
+        ctx.fillStyle = '#1d1f24';
+        ctx.fillRect(gx - 3, gy - 3, 38, 42);
+        ctx.fillStyle = ((gx + gy) % 128 === 0) ? '#ffd269' : '#24313d';
+        ctx.fillRect(gx, gy, 32, 36);
+        ctx.fillStyle = '#8b8780';
+        ctx.fillRect(gx - 4, gy + 36, 40, 5);
       }
     }
   }, 1, 1);
+
+  // Parede interna dos prédios (reboco envelhecido, rodapé e manchas)
+  const intWallTex = makeCanvasTex(256, 256, (ctx, w, h) => {
+    const g = ctx.createLinearGradient(0, 0, 0, h);
+    g.addColorStop(0, '#c8beae');
+    g.addColorStop(0.78, '#b2a694');
+    g.addColorStop(0.79, '#5e432c');
+    g.addColorStop(1, '#47311f');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, w, h);
+    // Faixa decorativa e moldura
+    ctx.fillStyle = '#8f7d69';
+    ctx.fillRect(0, h * 0.48, w, 6);
+    // Rachaduras e manchas
+    ctx.strokeStyle = 'rgba(55,45,35,0.45)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(45, 30); ctx.lineTo(62, 74); ctx.lineTo(54, 118);
+    ctx.moveTo(190, 60); ctx.lineTo(175, 108); ctx.lineTo(188, 145);
+    ctx.stroke();
+    addNoise(ctx, w, h, 800, ['#8c8070', '#dfd6c7', '#61564a']);
+  }, 2, 1);
+
+  // Piso interno de madeira detalhada
+  const intFloorTex = makeCanvasTex(256, 256, (ctx, w, h) => {
+    ctx.fillStyle = '#6b4423'; ctx.fillRect(0, 0, w, h);
+    for (let i = 0; i < 16; i++) {
+      ctx.fillStyle = i % 2 ? '#593619' : '#7a502b';
+      ctx.fillRect(0, i * 16, w, 15);
+      ctx.fillStyle = '#3a210d';
+      ctx.fillRect(0, i * 16 + 15, w, 1);
+      ctx.fillRect((i * 53) % w, i * 16, 2, 16);
+    }
+    addNoise(ctx, w, h, 600, ['#3d230e', '#8f6239']);
+  }, 3, 3);
 
   const crateTex = makeCanvasTex(64, 64, (ctx, w, h) => {
     ctx.fillStyle = '#754920'; ctx.fillRect(0, 0, w, h);
     ctx.strokeStyle = '#3f240b'; ctx.lineWidth = 5;
     ctx.strokeRect(3, 3, w - 6, h - 6);
+    ctx.beginPath(); ctx.moveTo(4, 4); ctx.lineTo(w - 4, h - 4); ctx.stroke();
   }, 1, 1);
+
+  // Texturas detalhadas dos Zumbis
+  const zSkinTex = makeCanvasTex(128, 128, (ctx, w, h) => {
+    const g = ctx.createLinearGradient(0, 0, 0, h);
+    g.addColorStop(0, '#7c9e66');
+    g.addColorStop(0.55, '#597a45');
+    g.addColorStop(1, '#3b542c');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, w, h);
+    // Veias e feridas
+    ctx.strokeStyle = '#2d4220'; ctx.lineWidth = 2;
+    for (let i = 0; i < 12; i++) {
+      ctx.beginPath(); ctx.moveTo(rand() * w, rand() * h); ctx.lineTo(rand() * w, rand() * h); ctx.stroke();
+    }
+    ctx.fillStyle = 'rgba(130,18,18,0.5)';
+    for (let i = 0; i < 7; i++) {
+      ctx.beginPath(); ctx.arc(rand() * w, rand() * h, 4 + rand() * 8, 0, Math.PI * 2); ctx.fill();
+    }
+    addNoise(ctx, w, h, 450, ['#2b4220', '#96b87f', '#5e1111']);
+  });
+
+  const zFaceTex = makeCanvasTex(128, 128, (ctx, w, h) => {
+    ctx.fillStyle = '#6b8e55';
+    ctx.fillRect(0, 0, w, h);
+    addNoise(ctx, w, h, 350, ['#4a6638', '#86a86e', '#5a1414']);
+    // Sobrancelhas fundas
+    ctx.fillStyle = '#2c3d21';
+    ctx.fillRect(22, 34, 32, 9);
+    ctx.fillRect(74, 34, 32, 9);
+    // Olhos fundos e pupilas amarelas
+    ctx.fillStyle = '#181111';
+    ctx.fillRect(26, 43, 24, 16);
+    ctx.fillRect(78, 43, 24, 16);
+    ctx.fillStyle = '#ffe44d';
+    ctx.fillRect(33, 47, 10, 8);
+    ctx.fillRect(85, 47, 10, 8);
+    // Nariz decomposto
+    ctx.fillStyle = '#2b3822';
+    ctx.beginPath(); ctx.moveTo(64, 58); ctx.lineTo(56, 74); ctx.lineTo(72, 74); ctx.closePath(); ctx.fill();
+    // Boca aberta com sangue e dentes
+    ctx.fillStyle = '#2b0606';
+    ctx.fillRect(36, 82, 56, 26);
+    ctx.fillStyle = '#8f1111';
+    ctx.fillRect(34, 106, 60, 7);
+    ctx.fillStyle = '#ebe2c7';
+    for (let i = 0; i < 5; i++) ctx.fillRect(40 + i * 10, 82, 6, 7);
+    for (let i = 0; i < 4; i++) ctx.fillRect(44 + i * 11, 101, 6, 7);
+  });
+
+  const zClothesTex = makeCanvasTex(128, 128, (ctx, w, h) => {
+    ctx.fillStyle = '#384c66';
+    ctx.fillRect(0, 0, w, h);
+    // Sujeira e rasgos
+    ctx.fillStyle = 'rgba(20,22,26,0.38)';
+    ctx.fillRect(0, h * 0.65, w, h * 0.35);
+    ctx.fillStyle = 'rgba(125,16,16,0.52)';
+    ctx.beginPath(); ctx.arc(w * 0.32, h * 0.42, 18, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(w * 0.72, h * 0.58, 13, 0, Math.PI * 2); ctx.fill();
+    addNoise(ctx, w, h, 450, ['#1c2633', '#526b8c', '#631010']);
+  });
 
   const groundMesh = new T.Mesh(
     new T.PlaneGeometry(MAP_LIMIT * 2, MAP_LIMIT * 2),
@@ -806,18 +960,25 @@ syncScreenVisibility();
     scene.add(r2);
   }
 
-  // Obstáculos e construções
+  // Obstáculos e construções com paredes grossas e interior
   const boxes = [];
   const pickups = [];
   let zombies = [];
-  let projectiles = [];
   let bombs = [];
 
-  function addObstacle(x, z, w, d, h, colorOrTex, y0 = 0) {
-    const isTex = colorOrTex && colorOrTex.isTexture;
-    const mat = new T.MeshStandardMaterial(
-      isTex ? { map: colorOrTex, roughness: 0.72 } : { color: colorOrTex, roughness: 0.65 }
-    );
+  const extWallMat = new T.MeshStandardMaterial({ map: extWallTex, roughness: 0.72 });
+  const intWallMat = new T.MeshStandardMaterial({ map: intWallTex, roughness: 0.78 });
+  const intFloorMat = new T.MeshStandardMaterial({ map: intFloorTex, roughness: 0.8 });
+  const roofMat = new T.MeshStandardMaterial({ color: 0x35383e, roughness: 0.7 });
+  const crateMat = new T.MeshStandardMaterial({ map: crateTex, roughness: 0.7 });
+
+  function addObstacle(x, z, w, d, h, matOrTex, y0 = 0) {
+    let mat = matOrTex;
+    if (matOrTex && matOrTex.isTexture) {
+      mat = new T.MeshStandardMaterial({ map: matOrTex, roughness: 0.74 });
+    } else if (typeof matOrTex === 'number') {
+      mat = new T.MeshStandardMaterial({ color: matOrTex, roughness: 0.68 });
+    }
     const mesh = new T.Mesh(new T.BoxGeometry(w, h, d), mat);
     mesh.position.set(x, y0 + h / 2, z);
     mesh.castShadow = !UI.cfg.potato;
@@ -827,8 +988,64 @@ syncScreenVisibility();
     return mesh;
   }
 
+  // Prédio oco com paredes grossas (1.2m), porta de entrada, interior texturizado e telhado acessível
+  function buildThickBuilding(cx, cz, w, d, h) {
+    const wallT = 1.2; // Paredes bem grossas
+    const doorW = 3.2;
+    const doorH = 2.6;
+
+    // Parede Norte (traseira)
+    addObstacle(cx, cz - d / 2 + wallT / 2, w, wallT, h, extWallMat, 0);
+    // Revestimento interno Norte
+    const inN = new T.Mesh(new T.PlaneGeometry(w - wallT * 2, h), intWallMat);
+    inN.position.set(cx, h / 2, cz - d / 2 + wallT + 0.03);
+    scene.add(inN);
+
+    // Parede Sul (frontal com porta central)
+    const sideW = (w - doorW) / 2;
+    addObstacle(cx - doorW / 2 - sideW / 2, cz + d / 2 - wallT / 2, sideW, wallT, h, extWallMat, 0);
+    addObstacle(cx + doorW / 2 + sideW / 2, cz + d / 2 - wallT / 2, sideW, wallT, h, extWallMat, 0);
+    if (h > doorH) {
+      addObstacle(cx, cz + d / 2 - wallT / 2, doorW, wallT, h - doorH, extWallMat, doorH);
+    }
+
+    // Parede Oeste
+    addObstacle(cx - w / 2 + wallT / 2, cz, wallT, d - wallT * 2, h, extWallMat, 0);
+    const inW = new T.Mesh(new T.PlaneGeometry(d - wallT * 2, h), intWallMat);
+    inW.rotation.y = Math.PI / 2;
+    inW.position.set(cx - w / 2 + wallT + 0.03, h / 2, cz);
+    scene.add(inW);
+
+    // Parede Leste
+    addObstacle(cx + w / 2 - wallT / 2, cz, wallT, d - wallT * 2, h, extWallMat, 0);
+    const inE = new T.Mesh(new T.PlaneGeometry(d - wallT * 2, h), intWallMat);
+    inE.rotation.y = -Math.PI / 2;
+    inE.position.set(cx + w / 2 - wallT - 0.03, h / 2, cz);
+    scene.add(inE);
+
+    // Piso interno de madeira texturizada
+    const floor = new T.Mesh(new T.PlaneGeometry(w - wallT * 1.8, d - wallT * 1.8), intFloorMat);
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.set(cx, 0.04, cz);
+    floor.receiveShadow = true;
+    scene.add(floor);
+
+    // Laje do teto espessa (0.65m)
+    addObstacle(cx, cz, w + 0.4, d + 0.4, 0.65, roofMat, h);
+
+    // Escada de caixas externas para subir no telhado (parkour)
+    addObstacle(cx - w / 2 - 1.3, cz - 2.2, 2.2, 2.2, 1.35, crateMat, 0);
+    addObstacle(cx - w / 2 - 1.3, cz + 0.3, 2.2, 2.2, 2.7, crateMat, 0);
+    addObstacle(cx - w / 2 - 1.3, cz + 2.8, 2.2, 2.2, 4.1, crateMat, 0);
+
+    // Mobília interna (mesas/caixotes) + loot interno e no telhado
+    addObstacle(cx + w * 0.2, cz - d * 0.18, 2.0, 1.1, 0.9, crateMat, 0);
+    spawnPickup(cx, cz, ['f', 'd', 'a', 'r', 'w'][Math.floor(rand() * 5)]);
+    spawnPickup(cx - 2.0, cz - 1.5, ['a', 'r', 'f'][Math.floor(rand() * 3)]);
+  }
+
   function spawnPickup(x, z, kind) {
-    if (isBlocked(x, z, 0, 0.5)) return;
+    if (isBlocked(x, z, 0, 0.45)) return;
     const colors = { f: 0xd94136, d: 0x2b88d9, a: 0x6ba32d, r: 0xb0b5ba, w: 0xffb703 };
     const mesh = new T.Mesh(
       new T.BoxGeometry(0.65, 0.45, 0.65),
@@ -843,23 +1060,19 @@ syncScreenVisibility();
     for (let i = -3; i <= 3; i++) {
       for (let j = -3; j <= 3; j++) {
         if (i === 0 && j === 0) continue;
-        const cx = i * 48 + 16;
-        const cz = j * 48 + 16;
-        const w = 11 + rand() * 5;
-        const d = 11 + rand() * 5;
-        const h = 6 + rand() * 11;
-        addObstacle(cx, cz, w, d, h, wallTex, 0);
-        // Rampa / caixas de parkour ao lado
-        addObstacle(cx - w / 2 - 1.5, cz, 2.2, 2.2, 1.3, crateTex, 0);
-        addObstacle(cx - w / 2 - 1.5, cz + 2.5, 2.0, 2.0, 2.5, crateTex, 0);
-        spawnPickup(cx + (rand() - 0.5) * 8, cz + (rand() - 0.5) * 8, ['f', 'd', 'a', 'r', 'w'][Math.floor(rand() * 5)]);
+        const cx = i * 48 + 18;
+        const cz = j * 48 + 18;
+        const w = 13 + Math.floor(rand() * 4);
+        const d = 13 + Math.floor(rand() * 4);
+        const h = 4.6 + Math.floor(rand() * 4) * 1.4;
+        buildThickBuilding(cx, cz, w, d, h);
       }
     }
-    for (let k = 0; k < 110; k++) {
-      const x = (rand() - 0.5) * MAP_LIMIT * 1.6;
-      const z = (rand() - 0.5) * MAP_LIMIT * 1.6;
-      if (Math.hypot(x, z) < 8 || isBlocked(x, z, 0, 1.4)) continue;
-      addObstacle(x, z, 1.8, 1.8, 1.1 + rand() * 1.1, crateTex, 0);
+    for (let k = 0; k < 95; k++) {
+      const x = (rand() - 0.5) * MAP_LIMIT * 1.55;
+      const z = (rand() - 0.5) * MAP_LIMIT * 1.55;
+      if (Math.hypot(x, z) < 9 || isBlocked(x, z, 0, 1.5)) continue;
+      addObstacle(x, z, 1.8, 1.8, 1.1 + rand() * 1.1, crateMat, 0);
       if (k % 2 === 0) spawnPickup(x + 1.2, z, ['f', 'd', 'a', 'r'][k % 4]);
     }
   }
@@ -885,47 +1098,177 @@ syncScreenVisibility();
     return floor;
   }
 
-  // Arma em primeira pessoa
+  // ============== MODELOS 3D DETALHADOS DAS ARMAS ==============
+  const matMetalDark = new T.MeshStandardMaterial({ color: 0x22252b, metalness: 0.72, roughness: 0.32 });
+  const matSteel = new T.MeshStandardMaterial({ color: 0x9aa2ac, metalness: 0.85, roughness: 0.22 });
+  const matWood = new T.MeshStandardMaterial({ color: 0x6b3f1d, metalness: 0.08, roughness: 0.72 });
+  const matPoly = new T.MeshStandardMaterial({ color: 0x2b302a, metalness: 0.15, roughness: 0.6 });
+  const matGold = new T.MeshStandardMaterial({ color: 0xd4a638, metalness: 0.88, roughness: 0.2 });
+  const matScopeLens = new T.MeshBasicMaterial({ color: 0x33b5ff });
+
   const gunGroup = new T.Group();
   gunGroup.position.set(0.26, -0.24, -0.52);
   camera.add(gunGroup);
 
-  const bodyMesh = new T.Mesh(new T.BoxGeometry(0.08, 0.09, 0.38), new T.MeshStandardMaterial({ color: 0x262930, metalness: 0.6, roughness: 0.35 }));
-  const barrelMesh = new T.Mesh(new T.CylinderGeometry(0.018, 0.018, 0.26, 8), new T.MeshStandardMaterial({ color: 0x8b939c, metalness: 0.8, roughness: 0.25 }));
-  barrelMesh.rotation.x = Math.PI / 2;
-  barrelMesh.position.set(0, 0.02, -0.26);
-  gunGroup.add(bodyMesh, barrelMesh);
+  function addPart(group, geo, mat, x, y, z, rx = 0, ry = 0, rz = 0) {
+    const m = new T.Mesh(geo, mat);
+    m.position.set(x, y, z);
+    if (rx) m.rotation.x = rx;
+    if (ry) m.rotation.y = ry;
+    if (rz) m.rotation.z = rz;
+    group.add(m);
+    return m;
+  }
 
-  // Zumbis
-  const zBodyMat = new T.MeshStandardMaterial({ color: 0x4b6b3c, roughness: 0.72 });
-  const zHeadMat = new T.MeshStandardMaterial({ color: 0x769464, roughness: 0.65 });
-  const zEyeMat = new T.MeshBasicMaterial({ color: 0xffe44d });
+  function rebuildWeaponModel(weapon) {
+    while (gunGroup.children.length) gunGroup.remove(gunGroup.children[0]);
+    const type = weapon ? weapon.model : 'pistol';
+
+    if (type === 'pistol' || type === 'revolver') {
+      const slideMat = type === 'revolver' ? matSteel : matMetalDark;
+      addPart(gunGroup, new T.BoxGeometry(0.065, 0.075, 0.32), slideMat, 0, 0.02, -0.05);
+      addPart(gunGroup, new T.BoxGeometry(0.058, 0.035, 0.30), matPoly, 0, -0.03, -0.05);
+      addPart(gunGroup, new T.BoxGeometry(0.055, 0.17, 0.085), matPoly, 0, -0.12, 0.06, 0.24);
+      const barrel = new T.CylinderGeometry(0.015, 0.015, 0.18, 8); barrel.rotateX(Math.PI / 2);
+      addPart(gunGroup, barrel, matSteel, 0, 0.028, -0.24);
+      if (type === 'revolver') {
+        const cyl = new T.CylinderGeometry(0.038, 0.038, 0.09, 10); cyl.rotateX(Math.PI / 2);
+        addPart(gunGroup, cyl, matMetalDark, 0, 0.01, -0.06);
+      }
+    } else if (type === 'shotgun') {
+      addPart(gunGroup, new T.BoxGeometry(0.07, 0.09, 0.34), matWood, 0, -0.03, 0.28, -0.18);
+      addPart(gunGroup, new T.BoxGeometry(0.075, 0.085, 0.36), matMetalDark, 0, 0.01, -0.02);
+      const barrel = new T.CylinderGeometry(0.02, 0.02, 0.56, 8); barrel.rotateX(Math.PI / 2);
+      addPart(gunGroup, barrel, matSteel, 0, 0.035, -0.44);
+      const tube = new T.CylinderGeometry(0.016, 0.016, 0.48, 8); tube.rotateX(Math.PI / 2);
+      addPart(gunGroup, tube, matMetalDark, 0, 0.0, -0.40);
+      addPart(gunGroup, new T.BoxGeometry(0.082, 0.065, 0.22), matWood, 0, -0.005, -0.36);
+    } else if (type === 'ak47') {
+      addPart(gunGroup, new T.BoxGeometry(0.075, 0.10, 0.32), matWood, 0, -0.025, 0.30, -0.15);
+      addPart(gunGroup, new T.BoxGeometry(0.078, 0.095, 0.42), matMetalDark, 0, 0.01, -0.02);
+      addPart(gunGroup, new T.BoxGeometry(0.072, 0.07, 0.24), matWood, 0, 0.005, -0.34);
+      const barrel = new T.CylinderGeometry(0.015, 0.015, 0.42, 8); barrel.rotateX(Math.PI / 2);
+      addPart(gunGroup, barrel, matSteel, 0, 0.022, -0.60);
+      // Carregador curvado
+      addPart(gunGroup, new T.BoxGeometry(0.055, 0.22, 0.085), matMetalDark, 0, -0.14, -0.12, -0.28);
+      addPart(gunGroup, new T.BoxGeometry(0.052, 0.14, 0.075), matWood, 0, -0.11, 0.08, 0.22);
+    } else if (type === 'm4' || type === 'smg') {
+      const len = type === 'smg' ? 0.32 : 0.46;
+      addPart(gunGroup, new T.BoxGeometry(0.072, 0.095, 0.28), matPoly, 0, -0.01, 0.28);
+      addPart(gunGroup, new T.BoxGeometry(0.076, 0.095, len), matMetalDark, 0, 0.01, -0.04);
+      // Trilho tático e mira holográfica
+      addPart(gunGroup, new T.BoxGeometry(0.06, 0.02, len * 0.85), matSteel, 0, 0.065, -0.05);
+      addPart(gunGroup, new T.BoxGeometry(0.055, 0.045, 0.09), matPoly, 0, 0.09, 0.02);
+      const barrel = new T.CylinderGeometry(0.014, 0.014, type === 'smg' ? 0.22 : 0.38, 8); barrel.rotateX(Math.PI / 2);
+      addPart(gunGroup, barrel, matSteel, 0, 0.02, type === 'smg' ? -0.30 : -0.44);
+      addPart(gunGroup, new T.BoxGeometry(0.05, 0.21, 0.075), matPoly, 0, -0.13, -0.08, -0.12);
+    } else if (type === 'sniper') {
+      addPart(gunGroup, new T.BoxGeometry(0.075, 0.105, 0.36), matPoly, 0, -0.02, 0.32, -0.1);
+      addPart(gunGroup, new T.BoxGeometry(0.078, 0.09, 0.48), matMetalDark, 0, 0.01, -0.04);
+      const barrel = new T.CylinderGeometry(0.015, 0.018, 0.62, 8); barrel.rotateX(Math.PI / 2);
+      addPart(gunGroup, barrel, matSteel, 0, 0.024, -0.56);
+      // Luneta óptica com lente azul
+      const scope = new T.CylinderGeometry(0.028, 0.024, 0.34, 10); scope.rotateX(Math.PI / 2);
+      addPart(gunGroup, scope, matMetalDark, 0, 0.095, -0.06);
+      const lens = new T.CylinderGeometry(0.024, 0.024, 0.01, 10); lens.rotateX(Math.PI / 2);
+      addPart(gunGroup, lens, matScopeLens, 0, 0.095, -0.232);
+    } else if (type === 'minigun') {
+      addPart(gunGroup, new T.BoxGeometry(0.16, 0.16, 0.42), matMetalDark, 0, -0.02, 0.02);
+      for (let i = 0; i < 6; i++) {
+        const ang = (i / 6) * Math.PI * 2;
+        const b = new T.CylinderGeometry(0.013, 0.013, 0.64, 6); b.rotateX(Math.PI / 2);
+        addPart(gunGroup, b, matSteel, Math.cos(ang) * 0.045, -0.02 + Math.sin(ang) * 0.045, -0.48);
+      }
+      const ring = new T.CylinderGeometry(0.065, 0.065, 0.04, 12); ring.rotateX(Math.PI / 2);
+      addPart(gunGroup, ring, matGold, 0, -0.02, -0.68);
+    } else if (type === 'katana' || type === 'machete') {
+      const bladeLen = type === 'katana' ? 0.78 : 0.54;
+      const grip = new T.CylinderGeometry(0.022, 0.024, 0.24, 8); grip.rotateX(Math.PI / 2);
+      addPart(gunGroup, grip, matPoly, 0, -0.04, 0.14);
+      addPart(gunGroup, new T.BoxGeometry(0.08, 0.08, 0.025), matGold, 0, -0.03, 0.01);
+      addPart(gunGroup, new T.BoxGeometry(0.016, 0.065, bladeLen), matSteel, 0, -0.01, -bladeLen / 2, -0.06);
+    } else if (type === 'hammer') {
+      const shaft = new T.CylinderGeometry(0.024, 0.026, 0.68, 8); shaft.rotateX(Math.PI / 2);
+      addPart(gunGroup, shaft, matWood, 0, -0.04, -0.08);
+      addPart(gunGroup, new T.BoxGeometry(0.18, 0.13, 0.20), matMetalDark, 0, 0.01, -0.40);
+      addPart(gunGroup, new T.BoxGeometry(0.20, 0.11, 0.04), matSteel, 0, 0.01, -0.50);
+    }
+  }
+
+  // ============== ZUMBIS ARTICULADOS COM TEXTURA ==============
+  const zSkinMat = new T.MeshStandardMaterial({ map: zSkinTex, roughness: 0.68 });
+  const zFaceMat = new T.MeshStandardMaterial({ map: zFaceTex, roughness: 0.62 });
+  const zClothesMat = new T.MeshStandardMaterial({ map: zClothesTex, roughness: 0.8 });
+  const zPantsMat = new T.MeshStandardMaterial({ color: 0x263447, roughness: 0.82 });
+  const zShoeMat = new T.MeshStandardMaterial({ color: 0x161618, roughness: 0.75 });
+  const zHairMat = new T.MeshStandardMaterial({ color: 0x1b140f, roughness: 0.88 });
+
+  // Geometrias compartilhadas para otimizar memória e FPS
+  const geoTorso = new T.BoxGeometry(0.64, 0.86, 0.34);
+  const geoHead = new T.BoxGeometry(0.42, 0.44, 0.42);
+  const geoHair = new T.BoxGeometry(0.44, 0.10, 0.44);
+  const geoArm = new T.BoxGeometry(0.18, 0.18, 0.66);
+  const geoLeg = new T.BoxGeometry(0.21, 0.68, 0.22);
+  const geoShoe = new T.BoxGeometry(0.23, 0.12, 0.34);
 
   function spawnZombie(x, z, hp, speed, isBoss = false) {
     const g = new T.Group();
-    const torso = new T.Mesh(new T.BoxGeometry(0.68, 0.92, 0.38), zBodyMat);
-    torso.position.y = 1.25;
-    const head = new T.Mesh(new T.BoxGeometry(0.42, 0.42, 0.42), zHeadMat);
-    head.position.y = 1.95;
+
+    const torso = new T.Mesh(geoTorso, zClothesMat);
+    torso.position.y = 1.24;
+    torso.castShadow = !UI.cfg.potato;
+
+    const headMaterials = [zSkinMat, zSkinMat, zHairMat, zSkinMat, zFaceMat, zSkinMat];
+    const head = new T.Mesh(geoHead, headMaterials);
+    head.position.y = 1.94;
     head.userData.isHead = true;
-    const eyeL = new T.Mesh(new T.BoxGeometry(0.07, 0.05, 0.05), zEyeMat);
-    eyeL.position.set(-0.1, 1.98, 0.21);
-    const eyeR = new T.Mesh(new T.BoxGeometry(0.07, 0.05, 0.05), zEyeMat);
-    eyeR.position.set(0.1, 1.98, 0.21);
-    g.add(torso, head, eyeL, eyeR);
+
+    const hair = new T.Mesh(geoHair, zHairMat);
+    hair.position.y = 2.18;
+
+    const armL = new T.Mesh(geoArm, zSkinMat);
+    armL.position.set(-0.43, 1.48, 0.28);
+    armL.rotation.x = 0.15;
+
+    const armR = new T.Mesh(geoArm, zSkinMat);
+    armR.position.set(0.43, 1.48, 0.28);
+    armR.rotation.x = 0.15;
+
+    const legL = new T.Group();
+    legL.position.set(-0.17, 0.78, 0);
+    const legLMesh = new T.Mesh(geoLeg, zPantsMat);
+    legLMesh.position.y = -0.34;
+    const shoeL = new T.Mesh(geoShoe, zShoeMat);
+    shoeL.position.set(0, -0.70, 0.05);
+    legL.add(legLMesh, shoeL);
+
+    const legR = new T.Group();
+    legR.position.set(0.17, 0.78, 0);
+    const legRMesh = new T.Mesh(geoLeg, zPantsMat);
+    legRMesh.position.y = -0.34;
+    const shoeR = new T.Mesh(geoShoe, zShoeMat);
+    shoeR.position.set(0, -0.70, 0.05);
+    legR.add(legRMesh, shoeR);
+
+    g.add(torso, head, hair, armL, armR, legL, legR);
     g.position.set(x, 0, z);
-    if (isBoss) g.scale.setScalar(2.1);
-    g.userData = { hp, maxHp: hp, speed, isBoss, dead: false, deadTimer: 0, atkCd: 0 };
+    if (isBoss) g.scale.setScalar(2.15);
+
+    g.userData = {
+      hp, maxHp: hp, speed, isBoss,
+      dead: false, deadTimer: 0, phase: rand() * 6.28,
+      limbs: { armL, armR, legL, legR, head }
+    };
     scene.add(g);
     zombies.push(g);
   }
 
-  // Estado do jogador
+  // ============== ESTADO DO JOGADOR ==============
   let gameState = null;
 
   function makeDefaultState() {
     return {
-      x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0,
+      x: 0, y: 0, z: 0, vy: 0,
       yaw: 0, pitch: 0,
       hp: 100, food: 80, water: 80, stamina: 100,
       wIdx: 0,
@@ -963,8 +1306,6 @@ syncScreenVisibility();
   function clearEntities() {
     zombies.forEach(z => scene.remove(z));
     zombies = [];
-    projectiles.forEach(p => scene.remove(p.mesh));
-    projectiles = [];
     bombs.forEach(b => scene.remove(b.mesh));
     bombs = [];
   }
@@ -989,6 +1330,7 @@ syncScreenVisibility();
         }
       } catch (_) {}
     }
+    rebuildWeaponModel(WEAPONS[gameState.wIdx]);
     for (let i = 0; i < 12; i++) spawnNearbyZombie();
   }
 
@@ -1071,6 +1413,7 @@ syncScreenVisibility();
         gameState.wIdx = idx;
         gameState.reloadTimer = 0;
         UI.aiming = false;
+        rebuildWeaponModel(WEAPONS[idx]);
         toast(WEAPONS[idx].name);
         return;
       }
@@ -1192,7 +1535,8 @@ syncScreenVisibility();
       gameState.cd = w.delay;
       beep(w.freq, 0.1, w.ty, 0.14, 1.5);
       gunGroup.position.z = -0.35;
-      gunGroup.rotation.x = -0.5;
+      gunGroup.rotation.x = -0.65;
+      gunGroup.rotation.z = 0.45;
       const dir = new T.Vector3();
       camera.getWorldDirection(dir);
       for (const zmb of zombies) {
@@ -1312,6 +1656,7 @@ syncScreenVisibility();
         gameState.mag[pick] = WEAPONS[pick].mag;
         gameState.ammo[pick] = WEAPONS[pick].pool;
         gameState.wIdx = pick;
+        rebuildWeaponModel(WEAPONS[pick]);
         toast('Desbloqueou: ' + WEAPONS[pick].name);
       }
     }
@@ -1443,6 +1788,7 @@ syncScreenVisibility();
             gameState.wIdx = idx;
             gameState.reloadTimer = 0;
             UI.aiming = false;
+            rebuildWeaponModel(WEAPONS[idx]);
             toast('Equipou ' + w.name);
             Bridge.renderInv();
           });
@@ -1582,6 +1928,21 @@ syncScreenVisibility();
     $('btnDist').textContent = '👁 Render: ' + (dNames[dIdx] || 'Médio');
   };
 
+  // Otimização: oculta caixas/paredes muito além da distância de render
+  let cullCounter = 0;
+  function cullDistantGeometry() {
+    const maxDist = (UI.cfg.rd || 150) + 25;
+    const maxDistSq = maxDist * maxDist;
+    const cx = camera.position.x;
+    const cz = camera.position.z;
+    for (let i = 0; i < boxes.length; i++) {
+      const b = boxes[i];
+      const dx = b.cx - cx;
+      const dz = b.cz - cz;
+      b.mesh.visible = (dx * dx + dz * dz) <= maxDistSq;
+    }
+  }
+
   function updateSimulation(dt) {
     if (!gameState) return;
     gameState.cd = Math.max(0, gameState.cd - dt);
@@ -1627,9 +1988,8 @@ syncScreenVisibility();
     if (!hitX) gameState.x += moveX;
     if (!hitZ) gameState.z += moveZ;
 
-    // Subida automática em degraus baixos de parkour
     const stepTarget = hitX || hitZ;
-    if (stepTarget && gameState.y <= stepTarget.top && stepTarget.top - gameState.y <= 1.35 && mag > 0.35) {
+    if (stepTarget && gameState.y <= stepTarget.top && stepTarget.top - gameState.y <= 1.38 && mag > 0.35) {
       gameState.y = stepTarget.top;
       gameState.vy = Math.max(gameState.vy, 1.5);
       gameState.airJumps = 1;
@@ -1659,7 +2019,6 @@ syncScreenVisibility();
       gameState.wasAir = true;
     }
 
-    // Fome, sede, ondas e chefe
     gameState.food = Math.max(0, gameState.food - 0.30 * dt);
     gameState.water = Math.max(0, gameState.water - 0.42 * dt);
     if (gameState.food <= 0 || gameState.water <= 0) {
@@ -1683,7 +2042,7 @@ syncScreenVisibility();
       beep(65, 0.9, 'sawtooth', 0.22, 0.6);
     }
 
-    const targetZombies = Math.min(36, 10 + wave * 3);
+    const targetZombies = Math.min(34, 10 + wave * 3);
     while (zombies.filter(z => !z.userData.dead).length < targetZombies && rand() < 0.25) {
       spawnNearbyZombie();
     }
@@ -1691,7 +2050,6 @@ syncScreenVisibility();
     if (UI.firing) fireWeapon();
     collectPickups();
 
-    // Bombas e granadas
     for (let i = bombs.length - 1; i >= 0; i--) {
       const b = bombs[i];
       b.timer -= dt;
@@ -1713,7 +2071,7 @@ syncScreenVisibility();
       }
     }
 
-    // IA dos zumbis
+    const nowSec = performance.now() * 0.001;
     for (let i = zombies.length - 1; i >= 0; i--) {
       const zmb = zombies[i];
       const d = zmb.userData;
@@ -1734,7 +2092,9 @@ syncScreenVisibility();
         zombies.splice(i, 1);
         continue;
       }
+      let moving = false;
       if (dist > 0.05 && dist < 34) {
+        moving = true;
         const stepDist = d.speed * dt;
         const nx = zmb.position.x + (dx / dist) * stepDist;
         const nz = zmb.position.z + (dz / dist) * stepDist;
@@ -1742,6 +2102,18 @@ syncScreenVisibility();
         if (!isBlocked(zmb.position.x, nz, 0, 0.45)) zmb.position.z = nz;
         zmb.rotation.y = Math.atan2(dx, dz);
       }
+
+      // Animação articulada dos membros dos zumbis
+      const L = d.limbs;
+      if (L) {
+        const swing = moving ? Math.sin(nowSec * d.speed * 2.6 + d.phase) : 0;
+        L.legL.rotation.x = swing * 0.7;
+        L.legR.rotation.x = -swing * 0.7;
+        L.armL.rotation.x = 0.15 + swing * 0.25;
+        L.armR.rotation.x = 0.15 - swing * 0.25;
+        L.head.rotation.z = Math.sin(nowSec * 2 + d.phase) * 0.12;
+      }
+
       const reach = d.isBoss ? 1.85 : 1.05;
       if (dist < reach && gameState.y < 1.3) {
         damagePlayer((d.isBoss ? 32 : 14) * dt);
@@ -1755,6 +2127,7 @@ syncScreenVisibility();
     }
   }
 
+  let lastHudCache = '';
   function syncHud() {
     if (!gameState) return;
     const w = WEAPONS[gameState.wIdx] || WEAPONS[0];
@@ -1771,9 +2144,13 @@ syncScreenVisibility();
     $('qGrN').textContent = gameState.mats.gr || 0;
     $('qBbN').textContent = gameState.mats.bb || 0;
 
-    $('matsHud').textContent = `⚙️ ${gameState.mats.m} · 🪵 ${gameState.mats.w} · 🧵 ${gameState.mats.c} · 💥 ${gameState.mats.g}`;
     const ammoTxt = w.melee ? 'Corpo a corpo' : (gameState.reloadTimer > 0 ? 'Recarregando...' : `${gameState.mag[gameState.wIdx]}/${gameState.ammo[gameState.wIdx]}`);
-    $('inf').innerHTML = `${w.name} <span style="color:${r.color}">[${r.label}]</span> (${ammoTxt}) · Onda ${wave} · Pts ${gameState.score}${gameState.combo > 1 ? ` · x${gameState.combo}` : ''}`;
+    const hudKey = `${w.name}|${ammoTxt}|${wave}|${gameState.score}|${gameState.combo}|${gameState.mats.m}|${gameState.mats.w}|${gameState.mats.c}|${gameState.mats.g}`;
+    if (hudKey !== lastHudCache) {
+      lastHudCache = hudKey;
+      $('matsHud').textContent = `⚙️ ${gameState.mats.m} · 🪵 ${gameState.mats.w} · 🧵 ${gameState.mats.c} · 💥 ${gameState.mats.g}`;
+      $('inf').innerHTML = `${w.name} <span style="color:${r.color}">[${r.label}]</span> (${ammoTxt}) · Onda ${wave} · Pts ${gameState.score}${gameState.combo > 1 ? ` · x${gameState.combo}` : ''}`;
+    }
 
     const activeBoss = zombies.find(z => !z.userData.dead && z.userData.isBoss);
     $('bbar').style.display = (UI.screen === 'play' && activeBoss) ? 'block' : 'none';
@@ -1796,6 +2173,8 @@ syncScreenVisibility();
       camera.rotation.y = gameState.yaw;
       camera.rotation.x = gameState.pitch;
 
+      if ((++cullCounter & 3) === 0) cullDistantGeometry();
+
       const curW = WEAPONS[gameState.wIdx] || WEAPONS[0];
       const scoped = Boolean(UI.aiming && curW.scope);
       const targetFov = UI.aiming ? (curW.scope ? (curW.zoom || 18) : 52) : (gameState.dashTimer > 0 ? 86 : 75);
@@ -1811,6 +2190,7 @@ syncScreenVisibility();
       gunGroup.position.y += ((UI.aiming ? -0.18 : -0.24) - gunGroup.position.y) * 12 * dt;
       gunGroup.position.z += (-0.52 - gunGroup.position.z) * 10 * dt;
       gunGroup.rotation.x += (0 - gunGroup.rotation.x) * 12 * dt;
+      gunGroup.rotation.z += (0 - gunGroup.rotation.z) * 12 * dt;
 
       flashLight.intensity = Math.max(0, flashLight.intensity - dt * 28);
       $('hitFlash').style.opacity = String(Math.max(0, parseFloat($('hitFlash').style.opacity || '0') - dt * 3.5));
@@ -1846,7 +2226,6 @@ syncScreenVisibility();
 
   window.addEventListener('resize', Bridge.applyGraphics);
 
-  // Inicialização
   buildCity();
   resetWorld(false);
   Bridge.applyGraphics();
