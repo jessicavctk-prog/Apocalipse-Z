@@ -38,9 +38,9 @@ button{
   cursor:pointer;
   touch-action:manipulation;
   pointer-events:auto;
-  transition:transform .08s ease,background .12s ease,border-color .12s ease;
+  transition:transform .08s ease,background .12s ease,border-color .12s ease,box-shadow .15s ease;
 }
-button:active{transform:scale(.94)}
+button:active{transform:scale(.95)}
 button.primary{
   background:linear-gradient(180deg,#8f2419,#3d100b);
   border-color:#ff634f;
@@ -200,23 +200,123 @@ button.primary{
   gap:12px;padding:16px;overflow-y:auto;
   background:var(--panel);z-index:200;
 }
+
+/* ===== NOVO DESIGN DA TELA INICIAL ===== */
 #menu{
   display:flex;
-  background:radial-gradient(circle at center,rgba(0,0,0,.45),rgba(9,6,6,.92));
-  text-align:center;z-index:150;
+  background:radial-gradient(circle at 50% 35%,rgba(140,28,18,.28),rgba(8,7,8,.88) 72%);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+  text-align:center;
+  z-index:150;
+}
+.menuPanel{
+  width:min(92vw,340px);
+  background:linear-gradient(180deg,rgba(26,20,19,.88),rgba(14,11,11,.94));
+  border:1.5px solid rgba(255,99,79,.45);
+  border-radius:18px;
+  padding:22px 20px 20px;
+  box-shadow:0 18px 45px rgba(0,0,0,.85),inset 0 1px 0 rgba(255,255,255,.08);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:12px;
+  position:relative;
+}
+.verBadge{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+  color:#ffb4a8;
+  background:rgba(201,59,43,.25);
+  border:1px solid rgba(255,99,79,.5);
+  padding:3px 10px;
+  border-radius:999px;
 }
 #menu h1{
-  margin:0;font-size:44px;letter-spacing:4px;color:#ff5442;
-  text-shadow:0 0 22px rgba(201,59,43,.75),0 4px 0 #380906;
+  margin:0;
+  font-size:38px;
+  font-weight:900;
+  letter-spacing:3px;
+  line-height:1;
+  background:linear-gradient(180deg,#ffffff 15%,#ff6b57 75%,#b82414 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 4px 12px rgba(201,59,43,.55));
 }
-#bestTxt{margin:0;font-size:13px;font-weight:800;color:#ffd27d;letter-spacing:1px}
+.menuSub{
+  margin:-4px 0 2px;
+  font-size:11.5px;
+  color:#b8ada8;
+  letter-spacing:.6px;
+}
+#bestTxt{
+  margin:0;
+  font-size:12px;
+  font-weight:800;
+  color:#ffd27d;
+  background:rgba(255,210,125,.1);
+  border:1px solid rgba(255,210,125,.3);
+  padding:4px 12px;
+  border-radius:8px;
+  letter-spacing:1px;
+}
+#bestTxt:empty{display:none}
 #engineAlert{
-  display:none;max-width:340px;font-size:12px;color:#ff9c8a;
+  display:none;max-width:300px;font-size:12px;color:#ff9c8a;
   background:rgba(120,20,15,.45);border:1px solid #ff634f;
   padding:8px 12px;border-radius:8px;
 }
-.menuStack{display:flex;flex-direction:column;gap:10px;width:240px}
-.menuStack button{width:100%;padding:14px 18px;font-size:14px;letter-spacing:1px}
+.menuStack{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  width:100%;
+  margin-top:4px;
+}
+.heroBtn{
+  width:100%;
+  padding:13px 16px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-align:left;
+  position:relative;
+  overflow:hidden;
+}
+.heroBtn .hIcon{
+  width:36px;height:36px;
+  border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;
+  flex-shrink:0;
+  background:rgba(0,0,0,.35);
+  border:1px solid rgba(255,255,255,.14);
+}
+.heroBtn .hText{display:flex;flex-direction:column;gap:2px}
+.heroBtn .hTitle{font-size:14px;font-weight:800;letter-spacing:.8px;color:#fff}
+.heroBtn .hDesc{font-size:10.5px;font-weight:600;color:rgba(255,255,255,.72)}
+
+.heroBtn.playMain{
+  background:linear-gradient(135deg,#b82919 0%,#63130b 100%);
+  border:1.5px solid #ff7a66;
+  box-shadow:0 8px 22px rgba(201,59,43,.45);
+}
+.heroBtn.playMain:hover{
+  border-color:#ffd27d;
+  box-shadow:0 10px 26px rgba(255,99,79,.6);
+}
+.heroBtn.resumeMain{
+  background:linear-gradient(135deg,#1d5e3a 0%,#0f3320 100%);
+  border:1.5px solid #4cd964;
+  box-shadow:0 8px 20px rgba(34,139,78,.35);
+}
+.heroBtn.secMain{
+  background:linear-gradient(180deg,rgba(44,37,35,.9),rgba(25,21,20,.95));
+  border:1.5px solid #6e574b;
+}
 
 .box{
   background:var(--card);border:2px solid var(--border);
@@ -231,6 +331,12 @@ button.primary{
 }
 .rowCard label{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:#ffd6be}
 .rowCard input[type=range]{width:100%;accent-color:#ff5442;height:26px}
+.creditsBox{
+  background:rgba(20,16,14,.85);border:1px solid rgba(255,210,125,.24);
+  border-radius:9px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;
+}
+.creditsTitle{font-size:12px;font-weight:800;color:#ffd27d;letter-spacing:.4px}
+.creditsName{font-size:13px;font-weight:800;color:#fff}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
 
@@ -342,12 +448,35 @@ button.primary{
 </div>
 
 <div id="menu" class="modal">
-  <h1>Z-PARKOUR</h1>
-  <p id="bestTxt"></p>
-  <p id="engineAlert">⚠️ Three.js não carregou. Verifique a conexão com a internet e recarregue.</p>
-  <div class="menuStack">
-    <button type="button" id="btnContinue" class="primary" style="display:none">CONTINUAR</button>
-    <button type="button" id="btnNew" class="primary">▶ NOVO JOGO</button>
+  <div class="menuPanel">
+    <span class="verBadge">v2.0 • TACTICAL UPDATE</span>
+    <h1>Z-PARKOUR</h1>
+    <p class="menuSub">SOBREVIVÊNCIA URBANA 3D</p>
+    <p id="bestTxt"></p>
+    <p id="engineAlert">⚠️ Three.js não carregou. Verifique a conexão com a internet e recarregue.</p>
+    <div class="menuStack">
+      <button type="button" id="btnContinue" class="heroBtn resumeMain" style="display:none">
+        <span class="hIcon">💾</span>
+        <span class="hText">
+          <span class="hTitle">CONTINUAR</span>
+          <span class="hDesc">Retomar partida salva</span>
+        </span>
+      </button>
+      <button type="button" id="btnNew" class="heroBtn playMain">
+        <span class="hIcon">⚔️</span>
+        <span class="hText">
+          <span class="hTitle">NOVO JOGO</span>
+          <span class="hDesc">Iniciar sobrevivência do zero</span>
+        </span>
+      </button>
+      <button type="button" id="btnMenuCfg" class="heroBtn secMain">
+        <span class="hIcon">⚙️</span>
+        <span class="hText">
+          <span class="hTitle">CONFIGURAÇÕES</span>
+          <span class="hDesc">Gráficos, horário e sensibilidade</span>
+        </span>
+      </button>
+    </div>
   </div>
 </div>
 
@@ -376,6 +505,10 @@ button.primary{
         <button type="button" id="btnPx">▦ Pixel: 1x</button>
         <button type="button" id="btnDist">👁 Render: Médio</button>
       </div>
+    </div>
+    <div class="creditsBox">
+      <span class="creditsTitle">🏅 Créditos</span>
+      <span class="creditsName">Victor Hugo</span>
     </div>
     <button type="button" id="btnFs">⛶ TELA CHEIA</button>
     <button type="button" id="btnCfgClose" class="primary">CONCLUÍDO</button>
@@ -590,6 +723,7 @@ $('sensSlider').addEventListener('input', e => {
 });
 
 onTap($('cfgBtn'), openConfig);
+onTap($('btnMenuCfg'), openConfig);
 onTap($('btnCfgClose'), () => {
   UI.screen = prevScreenBeforeCfg === 'cfg' ? 'menu' : prevScreenBeforeCfg;
   syncScreenVisibility();
@@ -944,24 +1078,20 @@ syncScreenVisibility();
     ctx.fillStyle = '#698d52';
     ctx.fillRect(0, 0, w, h);
     addNoise(ctx, w, h, 700, ['#456133', '#88ab6e', '#5a1414']);
-    // Sobrancelhas e olheiras
     ctx.fillStyle = '#26361c';
     ctx.fillRect(42, 66, 68, 18);
     ctx.fillRect(146, 66, 68, 18);
     ctx.fillStyle = '#181111';
     ctx.fillRect(50, 84, 52, 32);
     ctx.fillRect(154, 84, 52, 32);
-    // Olhos amarelos com pupila
     ctx.fillStyle = '#ffe44d';
     ctx.fillRect(62, 92, 24, 16);
     ctx.fillRect(166, 92, 24, 16);
     ctx.fillStyle = '#111';
     ctx.fillRect(71, 96, 6, 8);
     ctx.fillRect(175, 96, 6, 8);
-    // Nariz
     ctx.fillStyle = '#2b3822';
     ctx.beginPath(); ctx.moveTo(128, 114); ctx.lineTo(112, 148); ctx.lineTo(144, 148); ctx.closePath(); ctx.fill();
-    // Boca e dentes
     ctx.fillStyle = '#2b0606';
     ctx.fillRect(72, 164, 112, 54);
     ctx.fillStyle = '#8f1111';
@@ -1116,7 +1246,6 @@ syncScreenVisibility();
     const doorW = 3.2;
     const doorH = 2.6;
 
-    // Reserva lote com margem de segurança para evitar sobreposição
     buildingLots.push({
       x0: cx - w / 2 - 4.2,
       x1: cx + w / 2 + 4.2,
@@ -1155,11 +1284,9 @@ syncScreenVisibility();
     scene.add(floor);
 
     addObstacle(cx, cz, w + 0.4, d + 0.4, 0.65, roofMat, h, true);
-    // Parapeito no topo do prédio
     addObstacle(cx, cz - d / 2 + 0.2, w + 0.5, 0.4, 0.55, concreteMat, h + 0.65, true);
     addObstacle(cx, cz + d / 2 - 0.2, w + 0.5, 0.4, 0.55, concreteMat, h + 0.65, true);
 
-    // Escada de caixotes externa sem invadir outros lotes
     addObstacle(cx - w / 2 - 1.3, cz - 2.2, 2.2, 2.2, 1.35, crateMat, 0, true);
     addObstacle(cx - w / 2 - 1.3, cz + 0.3, 2.2, 2.2, 2.7, crateMat, 0, true);
     addObstacle(cx - w / 2 - 1.3, cz + 2.8, 2.2, 2.2, 4.1, crateMat, 0, true);
@@ -1590,7 +1717,7 @@ syncScreenVisibility();
         foodInv: gameState.foodInv, mats: gameState.mats,
         kills: gameState.kills, score: gameState.score
       }));
-      $('btnContinue').style.display = 'block';
+      $('btnContinue').style.display = 'flex';
     }
     $('bestTxt').textContent = best > 0 ? 'RECORDE: ' + best : '';
   }
@@ -2712,7 +2839,7 @@ syncScreenVisibility();
   if (bestSaved > 0) $('bestTxt').textContent = 'RECORDE: ' + bestSaved;
   try {
     const prevRun = JSON.parse(loadData(SAVE_KEY) || 'null');
-    if (prevRun && prevRun.hp > 0) $('btnContinue').style.display = 'block';
+    if (prevRun && prevRun.hp > 0) $('btnContinue').style.display = 'flex';
   } catch (_) {}
 
   UI.screen = 'menu';
